@@ -66,7 +66,6 @@ a:focus { -moz-outline-style: none; outline: none; }
 /*markdown 编辑器 */
 .v-show-content{
 	background: #fff!important;
-<<<<<<< HEAD
 }
 
 .full {
@@ -197,6 +196,3 @@ a:focus { -moz-outline-style: none; outline: none; }
   color: #ddd;
 }
 
-=======
-}
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f

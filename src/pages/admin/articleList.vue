@@ -129,7 +129,7 @@
 <script>
 import { checkAdmin } from "../../../static/js/public.js";
 import { webUrl } from "../../../static/js/public.js";
-import { exportInfo } from "@/utils/export.js";
+import { exportInfo } from "../../../static/js/export.js";
 
 export default {
   mixins: [checkAdmin],
