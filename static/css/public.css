@@ -1,0 +1,198 @@
+@charset "utf-8";
+/* CSS Document */
+body { box-sizing: content-box; font: normal 14px/1.5 \5fae\8f6f\96c5\9ed1, Microsoft YaHei, \5b8b\4f53 ;background-color: #fff; }
+/*解决：滚动条有无产生的跳动*/
+html {overflow-y: scroll;}
+:root {overflow-y: auto;overflow-x: hidden;}
+:root body {position: absolute;}
+body {width: 100vw;min-height: 100%;overflow: hidden;background: url(../img/bg.jpg);}
+body.admin{background:url('../img/bg_admin.jpg');}
+@media (min-width: 768px) {body.admin{background-size: cover;}}
+/*合并表格的border*/
+/* table { border-collapse: collapse; border-spacing: 0; } */
+img {-ms-interpolation-mode: bicubic; }
+/* ul li { list-style-type: none;} */
+input, textarea {color: inherit;font-size: inherit; font-family: inherit;}
+#app>.container>.page{min-height:calc(100vh - 262px);}
+/* 设置滚动条的样式 */
+::-webkit-scrollbar{width:8px;background-color:#aeaeae;}
+/* 滚动槽 */
+::-webkit-scrollbar-track-piece{width:8px;background-color:#f8f8f8;}
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb{width:8px;background-color:#00C0FF;min-height: 88px}
+::-webkit-scrollbar-thumb:hover{ width:8px; background-color:#aeaeae;}
+/*打印*/
+@media print {
+	img { max-width: 100% !important; }
+	p, h2, h3 { orphans: 3; widows: 3; }
+}
+/*不能拖拽*/
+textarea { resize: none; }
+/*去掉默认边框*/
+input,
+button,
+select,
+textarea,
+a { outline: none;color: #666666;}
+/* 只支持IE，过多使用效率低 */
+a { blr: expression(this.onFocus=this.close()); blr: expression(this.onFocus=this.blur()); }
+/* IE不支持 */
+a:focus { -moz-outline-style: none; outline: none; }
+/*清除浮动*/
+/*父级*/
+.clearfix:after { height: 0; content: ""; display: block; clear: both; visibility: hidden; font-size: 0; }
+.clearfix { zoom: 1; }
+/* 子级 */
+.clear { clear: both; height: 0; font-size: 0; }
+/*常用快捷*/
+.yahei { font-family: 'Microsoft YaHei'; }
+.songti { font-family: 'Arial'; }
+.fl { float: left; }
+.fr { float: right; }
+.nmr{margin-right: 0!important;}
+.nml{margin-left: 0!important;}
+.nmb{margin-bottom: 0!important;}
+.nmt{margin-top: 0!important;}
+.nomore{white-space: nowrap;text-overflow:ellipsis; overflow:hidden;}
+.trans{  -webkit-transition:all .3s linear;  transition:all .3s linear;  }
+/* 大小不定元素垂直居中 让子inline-block化，再在后面添加一个隐藏的垂直居中的inline-block元素实现*/
+.dib-vm{display:inline-block;*display:inline;*zoom:1;width:0; height:100%; vertical-align:middle;}
+.wrapper{max-width: 1200px; margin:0 auto;}
+/*字体选中颜色*/
+::selection{background: #0074D9;color: #fff;}
+::-moz-selection{background: #0074D9;color: #fff;}
+
+
+/*markdown 编辑器 */
+.v-show-content{
+	background: #fff!important;
+}
+
+.full {
+  width: 100%;
+  height: 100%;
+}
+.blue {
+  color: #20a0ff;
+}
+.red {
+  color: red;
+}
+.blue_dark {
+  color: #1f78c6;
+}
+.t_a {
+  text-align: center;
+}
+.t_r {
+  text-align: right;
+}
+.cur_p {
+  cursor: pointer;
+}
+.p_r {
+  position: relative;
+}
+.p_a {
+  position: absolute;
+}
+.mb_5 {
+  margin-bottom: 5px !important;
+}
+.mb_15 {
+  margin-bottom: 15px !important;
+}
+.mb_20 {
+  margin-bottom: 20px !important;
+}
+.mb_20 {
+  margin-bottom: 20px !important;
+}
+.mb_25 {
+  margin-bottom: 25px !important;
+}
+.height_full {
+  height: 100%;
+}
+.el-switch__label * {
+  font-size: 12px !important;
+}
+.mr_10 {
+  margin-right: 10px;
+}
+.mr_15 {
+  margin-right: 15px;
+}
+.ml_15 {
+  margin-left: 15px;
+}
+.p_r_40 {
+  padding-right: 40px;
+}
+.border_b_ccc {
+  border-bottom: 1px solid #cccccc;
+}
+.border_ccc {
+  border: 1px solid #cccccc;
+}
+
+.container {
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: scroll;
+}
+.red_tips_member {
+  color: #ff33af;
+}
+.red {
+  color: red;
+}
+.d_f {
+  display: flex;
+}
+.p_f {
+  position: fixed;
+}
+.flex_1 {
+  flex: 1;
+}
+.mb_10 {
+  margin-bottom: 10px !important;
+}
+.ml_10 {
+  margin-left: 10px !important;
+}
+.ml_50 {
+  margin-left: 50px !important;
+}
+.mt_20 {
+  margin-top: 20px;
+}
+.mt_10 {
+  margin-top: 10px;
+}
+.fs_12 {
+  font-size: 12px;
+}
+.fs_16 {
+  font-size: 16px;
+}
+.fs_14 {
+  font-size: 14px;
+}
+.fs_18 {
+  font-size: 18px;
+}
+.fs_20 {
+  font-size: 20px;
+}
+.fs_22 {
+  font-size: 22px;
+}
+.fs_36 {
+  font-size: 36px;
+}
+.grey {
+  color: #ddd;
+}
+
