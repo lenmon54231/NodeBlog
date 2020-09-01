@@ -3,24 +3,41 @@
     <div v-if="status==1" class="main signIn" @keyup.enter="signIn">
       <input v-model="name" placeholder="请输入登录账号" />
       <input v-model="password" placeholder="请输入密码" type="password" />
+<<<<<<< HEAD
       <el-button @click="signIn" class="sign">登录</el-button>
       <p class="toSignUp">
         没有账号 ?
         <span @click="toSignUp">新建一个 !</span>
+=======
+      <el-button @click="signIn" class="sign">Sign In</el-button>
+      <p class="toSignUp">
+        New to Taoland ?
+        <span @click="toSignUp">Sign Up !</span>
+>>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
       </p>
     </div>
     <div v-else-if="status==2" class="main signUp" @keyup.enter="signUp">
       <input v-model="name" placeholder="请输入登录账号" />
       <input v-model="nickName" placeholder="请输入昵称" />
       <input v-model="password" placeholder="请输入密码" type="password" />
+<<<<<<< HEAD
       <el-button @click="signUp" class="sign">新建</el-button>
       <p class="toSignUp">
         <span @click="back">返回登录 !</span>
+=======
+      <el-button @click="signUp" class="sign">Sign Up</el-button>
+      <p class="toSignUp">
+        <span @click="back">Back to Sign In !</span>
+>>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
       </p>
     </div>
     <div v-else-if="status==3" class="loading">
       <div v-if="!txtSignIn" class="outside"></div>
+<<<<<<< HEAD
       <p v-else class="txt">登录</p>
+=======
+      <p v-else class="txt">Sign In</p>
+>>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
     </div>
   </div>
 </template>

@@ -33,9 +33,17 @@ const articleSchema = new mongoose.Schema({
 })
 //demo
 const demoSchema = new mongoose.Schema({
+<<<<<<< HEAD
     name: String,
     date: String,
     fileName: String,
+=======
+    title: String,
+    date: String,
+    file: String,
+    pic: String,
+    gist: String,
+>>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
 })
 /************** 定义模型Model **************/
 // const Models = {

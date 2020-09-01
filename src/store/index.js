@@ -1,5 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+<<<<<<< HEAD
+=======
+import { mapState } from 'vuex'
+>>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
 
 Vue.use(Vuex)
 
@@ -10,6 +14,10 @@ export default new Vuex.Store({
   },
   mutations: {
     changeIndex(state, n) {
+<<<<<<< HEAD
+=======
+      state.activeIndex = n
+>>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
     },
     changeIsSignIn(state, n) {
       state.isSignIn = n

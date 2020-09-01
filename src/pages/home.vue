@@ -24,7 +24,11 @@
                   <a href="http://music.163.com/#/user/home?id=272667179" target="_blank">
                     <i class="iconfont icon-yinle"></i>
                   </a>
+<<<<<<< HEAD
                   <a
+=======
+                  <a  
+>>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
                     href="https://weibo.com/u/5746403289?refer_flag=1005055010_&is_all=1"
                     target="_blank"
                   >
@@ -36,12 +40,21 @@
             <div class="card">
               <p class="title">FRIENDS</p>
               <div class="row">
+<<<<<<< HEAD
                 <a class="link" href target="_blank">哈维</a>
                 <a class="link" href target="_blank">的光和热</a>
                 <a class="link" href target="_blank">Secret Blog</a>
                 <a class="link" href target="_blank">Secret Blog</a>
                 <a class="link" href target="_blank">Secret Blog</a>
                 <a class="link" href target="_blank">Secret Blog</a>
+=======
+                <a class="link" href="" target="_blank">哈维</a>
+                <a class="link" href="" target="_blank">的光和热</a>
+                <a class="link" href="" target="_blank">Secret Blog</a>
+                <a class="link" href="" target="_blank">Secret Blog</a>
+                <a class="link" href="" target="_blank">Secret Blog</a>
+                <a class="link" href="" target="_blank">Secret Blog</a>
+>>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
               </div>
             </div>
           </div>
