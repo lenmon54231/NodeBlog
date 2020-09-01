@@ -4,13 +4,8 @@ const express = require('express');
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const path = require('path');
-<<<<<<< HEAD
 const fs = require('fs');
 const getDate = require("../static/js/getDate.js");
-=======
-
-
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
 /************** 创建(create) 读取(get) 更新(update) 删除(delete) **************/
 // 注册
 router.post('/api/admin/signUp', (req, res) => {
@@ -74,11 +69,7 @@ router.post('/api/admin/signIn', (req, res) => {
         }
         res.send({ 'status': 1, 'msg': '登陆成功', 'token': docs[0].token, 'user_name': docs[0]["name"], 'type': docs[0]["type"], 'nickName': docs[0]["nickName"], 'avatar': docs[0]["avatar"] })
       })
-<<<<<<< HEAD
     } else {
-=======
-    } else { 
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
       res.send({ 'status': 0, 'msg': '登录失败' });
     }
   })
@@ -391,19 +382,13 @@ router.post('/api/demoList', (req, res) => {
     res.send(data)
   })
 })
-<<<<<<< HEAD
 // demo下载
 router.get('/api/download/:id', function (req, res) {
-=======
-// demo详情页
-router.get('/api/demoDetail/:id', function (req, res) {
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
   db.Demo.findOne({ _id: req.params.id }, function (err, docs) {
     if (err) {
       console.error(err)
       return
     }
-<<<<<<< HEAD
     if (docs) {
       let filePath = '../static/files/' + docs.fileName
       let stats = fs.statSync(filePath);
@@ -427,14 +412,6 @@ router.get('/api/demoDetail/:id', function (req, res) {
 router.post('/api/admin/saveDemo', (req, res) => {
   req.body.date = getDate();
   let newDemo = new db.Demo(req.body);
-=======
-    res.send(docs)
-  })
-})
-//demo保存
-router.post('/api/admin/saveDemo', (req, res) => {
-  let newDemo = new db.Demo(req.body.demoInformation);
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
   newDemo.save(function (err) {
     if (err) {
       res.send(err);
@@ -466,16 +443,11 @@ router.post('/api/admin/updateDemo', (req, res) => {
 })
 // demo删除
 router.post('/api/admin/deleteDemo', (req, res) => {
-<<<<<<< HEAD
   db.Demo.findOne({ _id: req.body._id }, (err, docs) => {
-=======
-  db.Demo.remove({ _id: req.body._id }, (err) => {
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
     if (err) {
       res.status(500).send()
       return
     }
-<<<<<<< HEAD
     let fileName = docs.fileUrl.split("\\").splice(-1);
     fs.unlinkSync('../static/files/' + fileName);
     db.Demo.remove({ _id: req.body._id }, (err) => {
@@ -499,9 +471,6 @@ router.post('/api/infor', function (req, res, next) {
     } else {
       res.send({ code: 200, msg: '上传成功', rows: fileName })
     }
-=======
-    res.send({ 'status': 1, 'msg': '删除成功' })
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
   })
 })
 

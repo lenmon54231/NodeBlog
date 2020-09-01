@@ -1,6 +1,5 @@
 <template>
   <div id="content" v-loading="isLoading">
-<<<<<<< HEAD
     <div class="mt_20 mb_25">
       <a @click="toHome" href="javascript:;">返回首页</a>
     </div>
@@ -12,17 +11,6 @@
         </el-button>
         <el-button :type="type=='demo'?'primary':'info'" @click="toggle">
           <i class="iconfont icon-play"></i> 文件列表
-=======
-    <a @click="toHome" href="javascript:;" class="toHome">返回首页</a>
-    <h1 class="title">{{type=='article'?'文章列表':'demo列表'}}</h1>
-    <div class="tab-box">
-      <el-button-group>
-        <el-button :type="type=='article'?'primary':'info'" @click="toggle">
-          <i class="iconfont icon-archives"></i> Article
-        </el-button>
-        <el-button :type="type=='demo'?'primary':'info'" @click="toggle">
-          <i class="iconfont icon-play"></i> Demo
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
         </el-button>
       </el-button-group>
     </div>
@@ -68,19 +56,11 @@
     </div>
 
     <div v-if="type=='demo'">
-<<<<<<< HEAD
       <el-button @click="handleAdd2()" class="btn-add">上传+</el-button>
       <el-table :data="demoList" style="width: 100%" header-align="right" border stripe>
         <el-table-column label="名字" width="200">
           <template slot-scope="scope">
             <span>{{ scope.row.name }}</span>
-=======
-      <el-button @click="handleAdd2()" class="btn-add">新增+</el-button>
-      <el-table :data="demoList" style="width: 100%" header-align="right" border stripe>
-        <el-table-column label="标题" width="200">
-          <template slot-scope="scope">
-            <span>{{ scope.row.title }}</span>
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
           </template>
         </el-table-column>
         <el-table-column label="日期" width="200">
@@ -91,17 +71,10 @@
         </el-table-column>
         <el-table-column label="file" width="200">
           <template slot-scope="scope">
-<<<<<<< HEAD
             <span>{{ scope.row.fileName }}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column label="图片" width="200">
-=======
-            <span>{{ scope.row.file }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="图片" width="200">
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
           <template slot-scope="scope">
             <span>{{ scope.row.pic }}</span>
           </template>
@@ -110,24 +83,16 @@
           <template slot-scope="scope">
             <span>{{ scope.row.gist.slice(0,30) }}</span>
           </template>
-<<<<<<< HEAD
         </el-table-column>-->
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="download(scope.$index, scope.row)">下载</el-button>
-=======
-        </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleLook2(scope.$index, scope.row)">查看</el-button>
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
             <el-button size="mini" type="success" @click="handleEdit2(scope.$index, scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="handleDelete2(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-<<<<<<< HEAD
 
     <!--批量导入店铺-->
     <el-dialog title="上传文件" :visible.sync="showInfo" @close="cleanIt" width="580px">
@@ -158,50 +123,38 @@
         </div>
       </el-form>
     </el-dialog>
-=======
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
   </div>
 </template>
 
 <script>
 import { checkAdmin } from "../../../static/js/public.js";
 import { webUrl } from "../../../static/js/public.js";
-<<<<<<< HEAD
 import { exportInfo } from "@/utils/export.js";
-=======
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
 
 export default {
   mixins: [checkAdmin],
   data() {
     return {
-<<<<<<< HEAD
       submitForm: {
         name: null,
         fileName: null,
       },
       showInfo: false,
       fileList: [],
-=======
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
       articleList: [],
       demoList: [],
       isLoading: false,
       type: "article",
-<<<<<<< HEAD
       CloseShopFormLoading: false,
       CloseShopForm: {},
       // uploadUrl: "http://localhost:8088/infor",
       uploadUrl: "/api/infor",
-=======
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
     };
   },
   beforeCreate: function () {},
   mounted: function () {
     // 获取文章列表
     this.isLoading = true;
-<<<<<<< HEAD
     this.getArticalList();
     this.getDemoList();
   },
@@ -264,23 +217,6 @@ export default {
       // }
       // return isLt2M;
     },
-=======
-    this.$axios.post(webUrl + "articleList").then((res) => {
-      if (res) {
-        this.isLoading = false;
-        this.articleList = res.data.reverse();
-      }
-    });
-    // 获取demo列表
-    this.$axios.post(webUrl + "demoList").then((res) => {
-      if (res) {
-        this.isLoading = false;
-        this.demoList = res.data.reverse();
-      }
-    });
-  },
-  methods: {
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
     toHome: function () {
       this.$router.replace({ name: "home" });
     },
@@ -293,21 +229,15 @@ export default {
       this.$router.push("/admin/edit");
     },
     handleAdd2() {
-<<<<<<< HEAD
       this.showInfo = true;
       //新增-demo
       // this.$router.push("/admin/editt");
-=======
-      //新增-demo
-      this.$router.push("/admin/editt");
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
     },
     handleLook(index, row) {
       //查看
       let id = row._id;
       window.open("#/detail/" + id);
     },
-<<<<<<< HEAD
     download(index, row) {
       console.log(row, "reow");
       let info = {
@@ -322,11 +252,6 @@ export default {
           console.log("传送");
         })
         .catch(() => {});
-=======
-    handleLook2(index, row) {
-      //查看-demo
-      window.open("#/demo/");
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
     },
     handleEdit(index, row) {
       //编辑
@@ -367,10 +292,7 @@ export default {
           });
         });
     },
-<<<<<<< HEAD
     cleanCloseShop() {},
-=======
->>>>>>> 39a14467ea9c416559e284c28b2181acfb29080f
     handleDelete2(index, row) {
       //删除--demo
       let self = this;
