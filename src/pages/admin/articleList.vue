@@ -119,7 +119,7 @@
         </el-form-item>
         <div class="t_r mt_10">
           <el-button type="default" @click="showInfo = false">取消</el-button>
-          <el-button type="primary" :loading="CloseShopFormLoading" @click="uploadInfo">确定</el-button>
+          <el-button type="primary" :loading="CloseShopFormLoading" @click="saveDemo">确定</el-button>
         </div>
       </el-form>
     </el-dialog>
@@ -137,6 +137,7 @@ export default {
     return {
       submitForm: {
         name: null,
+        IDName: null,
         fileName: null,
       },
       showInfo: false,
@@ -176,8 +177,9 @@ export default {
         }
       });
     },
-    uploadInfo() {
+    saveDemo() {
       this.CloseShopFormLoading = true;
+      console.log();
       this.$axios
         .post(webUrl + "admin/saveDemo", this.submitForm)
         .then((res) => {
@@ -193,15 +195,16 @@ export default {
     cleanIt() {
       this.submitForm = {
         name: null,
+        IDName: null,
         fileName: null,
       };
       this.fileList = [];
     },
     uploadSuccess(res, file, fileList) {
-      console.log(res, file, fileList);
       if (res.code == 200) {
         this.fileList = fileList;
-        this.submitForm.fileName = res.rows;
+        this.submitForm.fileName = res.rows.originalname;
+        this.submitForm.IDName = res.rows.IDName;
         this.$message.success("上传成功");
       } else if (res.code == 999) {
       } else {
@@ -210,7 +213,6 @@ export default {
       }
     },
     beforeUpload(file) {
-      console.log(file, "file");
       // const isLt2M = file.size / 1024 / 1024 < 5;
       // if (!isLt2M) {
       //   this.$message.error("上传头像文件大小不能超过 5MB!");
@@ -239,18 +241,20 @@ export default {
       window.open("#/detail/" + id);
     },
     download(index, row) {
-      console.log(row, "reow");
+      let Tem = JSON.parse(JSON.stringify(row));
+      let infoTem = Tem.fileName.split(".");
+      let nameTem = infoTem.reduce((a, b) => {
+        return a + "." + b;
+      });
       let info = {
         method: "POST",
         url: "/api/download/" + row._id,
         responseType: "blob",
-        type: "excel",
-        name: "足迹数据详情",
+        type: infoTem[infoTem.length - 1],
+        name: nameTem,
       };
       exportInfo(info)
-        .then((res) => {
-          console.log("传送");
-        })
+        .then((res) => {})
         .catch(() => {});
     },
     handleEdit(index, row) {

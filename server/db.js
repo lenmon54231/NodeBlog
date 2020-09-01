@@ -36,6 +36,7 @@ const demoSchema = new mongoose.Schema({
     name: String,
     date: String,
     fileName: String,
+    IDName:String,
 })
 /************** 定义模型Model **************/
 // const Models = {

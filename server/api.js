@@ -383,20 +383,22 @@ router.post('/api/demoList', (req, res) => {
   })
 })
 // demo下载
-router.get('/api/download/:id', function (req, res) {
+router.post('/api/download/:id', function (req, res) {
+
   db.Demo.findOne({ _id: req.params.id }, function (err, docs) {
     if (err) {
       console.error(err)
       return
     }
     if (docs) {
-      let filePath = '../static/files/' + docs.fileName
+      console.log(req.params.id, docs.IDName)
+      let filePath = '../static/files/' + docs.IDName
       let stats = fs.statSync(filePath);
       console.log(stats)
       if (stats.isFile()) {
         res.set({
           'Content-Type': 'application/octet-stream',
-          'Content-Disposition': 'attachment; filename=' + docs.fileName,
+          'Content-Disposition': 'attachment; filename=' + docs.IDName,
           'Content-Length': stats.size
         });
         fs.createReadStream(filePath).pipe(res);
@@ -410,6 +412,7 @@ router.get('/api/download/:id', function (req, res) {
 })
 //demo保存
 router.post('/api/admin/saveDemo', (req, res) => {
+  console.log(res.body, '存入的shuju')
   req.body.date = getDate();
   let newDemo = new db.Demo(req.body);
   newDemo.save(function (err) {
@@ -463,15 +466,21 @@ router.post('/api/admin/deleteDemo', (req, res) => {
 
 //上传的文件
 router.post('/api/infor', function (req, res, next) {
+  console.log(req.files[0], '传递来的数据')
   const newname = req.files[0].path + path.parse(req.files[0].originalname).ext
-  let fileName = JSON.parse(JSON.stringify(newname)).split("\\").splice(-1)[0];
+  let fileName = req.files[0].filename + path.parse(req.files[0].originalname).ext;
+  let info = {
+    originalname: req.files[0].originalname,
+    IDName: fileName
+  }
   fs.rename(req.files[0].path, newname, function (err) {
     if (err) {
       res.send({ code: 999, msg: '上传失败' })
     } else {
-      res.send({ code: 200, msg: '上传成功', rows: fileName })
+      res.send({ code: 200, msg: '上传成功', rows: info })
     }
   })
+
 })
 
 module.exports = router;
