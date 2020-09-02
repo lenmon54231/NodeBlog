@@ -384,7 +384,6 @@ router.post('/api/demoList', (req, res) => {
 })
 // demo下载
 router.post('/api/download/:id', function (req, res) {
-
   db.Demo.findOne({ _id: req.params.id }, function (err, docs) {
     if (err) {
       console.error(err)
@@ -407,8 +406,6 @@ router.post('/api/download/:id', function (req, res) {
       }
     }
   })
-
-
 })
 //demo保存
 router.post('/api/admin/saveDemo', (req, res) => {

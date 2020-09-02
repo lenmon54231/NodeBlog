@@ -253,7 +253,7 @@ export default {
         type: infoTem[infoTem.length - 1],
         name: nameTem,
       };
-      exportInfo(info)
+      exportInfo(info) 
         .then((res) => {})
         .catch(() => {});
     },

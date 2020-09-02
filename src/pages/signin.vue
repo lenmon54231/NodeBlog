@@ -18,17 +18,17 @@
         <span @click="back">返回登录 !</span>
       </p>
     </div>
-    <div v-else-if="status==3" class="loading">
+    <!-- <div v-else-if="status==3" class="loading">
       <div v-if="!txtSignIn" class="outside"></div>
       <p v-else class="txt">登录</p>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import { webUrl } from "../../static/js/public.js";
 
-export default {
+export default { 
   created() {},
   data() {
     return {

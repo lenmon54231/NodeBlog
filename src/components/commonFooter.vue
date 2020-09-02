@@ -1,12 +1,12 @@
 <template>
   <footer>
     <div class="wrapper">
-      <p>
+      <!-- <p>
         本站记录我前端之旅的沿途风景！ Contact me at:
         <a href="https://github.com/lenmon54231" target="_blank">
           <i class="iconfont icon-github"></i>
         </a>
-      </p>
+      </p> -->
       <p>欢迎光临本站,当前总访问量{{visit}}次</p>
       <p>built with vue and node</p>
     </div>

@@ -10,11 +10,11 @@
         <el-col :xs="0" :sm="4" :md="6" :lg="6" :xl="6">
           <div class="aside">
             <div class="card">
-              <p class="title">ABOUT ME</p>
+              <!-- <p class="title">ABOUT ME</p> -->
               <img class="pic" src="../../static/img/p1.png" alt />
               <div class="row">
                 <p>行路有良友，便是捷径。带上我吧，一起去看更大的世界</p>
-                <div class="icons">
+                <!-- <div class="icons">
                   <a href="https://github.com/lenmon54231" target="_blank">
                     <i class="iconfont icon-github"></i>
                   </a>
@@ -30,10 +30,10 @@
                   >
                     <i class="iconfont icon-weibo"></i>
                   </a>
-                </div>
+                </div> -->
               </div>
             </div>
-            <div class="card">
+            <!-- <div class="card">
               <p class="title">FRIENDS</p>
               <div class="row">
                 <a class="link" href target="_blank">哈维</a>
@@ -43,7 +43,7 @@
                 <a class="link" href target="_blank">Secret Blog</a>
                 <a class="link" href target="_blank">Secret Blog</a>
               </div>
-            </div>
+            </div> -->
           </div>
         </el-col>
       </el-row>
