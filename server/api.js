@@ -448,8 +448,8 @@ router.post('/api/admin/deleteDemo', (req, res) => {
       res.status(500).send()
       return
     }
-    let fileName = docs.fileUrl.split("\\").splice(-1);
-    fs.unlinkSync('../static/files/' + fileName);
+    // let fileName = docs.fileUrl.split("\\").splice(-1);
+    fs.unlinkSync('../static/files/' + docs.IDName);
     db.Demo.remove({ _id: req.body._id }, (err) => {
       if (err) {
         res.status(500).send()
@@ -460,7 +460,6 @@ router.post('/api/admin/deleteDemo', (req, res) => {
   })
 
 })
-
 //上传的文件
 router.post('/api/infor', function (req, res, next) {
   console.log(req.files[0], '传递来的数据')

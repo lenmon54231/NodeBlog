@@ -2,6 +2,7 @@
   <div id="content" v-loading="isLoading">
     <div class="mt_20 mb_25">
       <a @click="toHome" href="javascript:;">返回首页</a>
+      <a @click="signOut" href="javascript:;">退出登录</a>
     </div>
     <!-- <h1 class="title">{{type=='article'?'文章':'文件'}}</h1> -->
     <div class="tab-box">
@@ -57,38 +58,50 @@
 
     <div v-if="type=='demo'">
       <el-button @click="handleAdd2()" class="btn-add">上传+</el-button>
-      <el-table :data="demoList" style="width: 100%" header-align="right" border stripe>
-        <el-table-column label="名字" width="200">
+      <el-table :data="demoList" border>
+        <el-table-column label="名字">
           <template slot-scope="scope">
             <span>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="日期" width="200">
+        <el-table-column label="日期">
           <template slot-scope="scope">
             <i class="el-icon-time"></i>
             <span>{{ scope.row.date }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="file" width="200">
+        <el-table-column label="file">
           <template slot-scope="scope">
             <span>{{ scope.row.fileName }}</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column label="图片" width="200">
+        <!-- <el-table-column label="图片" >
           <template slot-scope="scope">
             <span>{{ scope.row.pic }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="摘要" width="200">
+        <el-table-column label="摘要" >
           <template slot-scope="scope">
             <span>{{ scope.row.gist.slice(0,30) }}</span>
           </template>
         </el-table-column>-->
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="download(scope.$index, scope.row)">下载</el-button>
-            <el-button size="mini" type="success" @click="handleEdit2(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete2(scope.$index, scope.row)">删除</el-button>
+            <div class="flexCenter" style="margin:0 50px">
+              <div>
+                <el-button size="mini" type="primary" @click="download(scope.$index, scope.row)">下载</el-button>
+              </div>
+              <div>
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="handleDelete2(scope.$index, scope.row)"
+                >删除</el-button>
+              </div>
+            </div>
+            <!-- <el-button size="mini" type="primary" @click="download(scope.$index, scope.row)">下载</el-button> -->
+            <!-- <el-button size="mini" type="success" @click="handleEdit2(scope.$index, scope.row)">编辑</el-button> -->
+            <!-- <el-button size="mini" type="danger" @click="handleDelete2(scope.$index, scope.row)">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -160,6 +173,13 @@ export default {
     this.getDemoList();
   },
   methods: {
+    signOut() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user_name");
+      localStorage.removeItem("nickName");
+      localStorage.removeItem("avatar");
+      this.$router.push("/sign");
+    },
     getArticalList() {
       this.$axios.post(webUrl + "articleList").then((res) => {
         if (res) {
@@ -253,7 +273,7 @@ export default {
         type: infoTem[infoTem.length - 1],
         name: nameTem,
       };
-      exportInfo(info) 
+      exportInfo(info)
         .then((res) => {})
         .catch(() => {});
     },

@@ -1,19 +1,6 @@
 <template>
   <div class="page">
-    <div class="wrapper">
-      <el-row>
-        <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8" v-for="item in items" :key="item.id">
-          <div class="card">
-            <el-image class="pic" :src="item.pic" :fit="fit"></el-image>
-            <div class="text">
-              <p class="title">{{item.title}}</p>
-              <p class="gist">{{item.gist}}</p>
-              <a class="view" :href="item.file" target="_blank"></a>
-            </div>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
+   
   </div>
 </template>
 

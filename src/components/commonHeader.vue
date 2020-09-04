@@ -37,7 +37,7 @@
             </el-menu-item>
             <el-menu-item index="5">
               <router-link to="/demo">
-                <i class="iconfont icon-play"></i>文件
+                <i class="iconfont icon-play"></i>网抑云
               </router-link>
             </el-menu-item>
             <!-- <el-menu-item index="6">

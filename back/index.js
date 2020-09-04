@@ -12,7 +12,7 @@ const cmd = 'mongodump';
 
 function scheduleCronstyle() {
   console.log('start....')
-  schedule.scheduleJob('0 30 5 * * *', function () {  //每周日的23时整
+  schedule.scheduleJob('0 30 5 * * *', function () {  //每天5点半
     console.log('scheduleJob....')
     process.exec(cdIn, function (error, stdout, stderr) {  //在cmd中执行上方定义的命令
       console.log('exec....', cdIn)
