@@ -16,6 +16,7 @@ const Archives = r => require.ensure([], () => r(require('@/pages/archives')), '
 const Categories = r => require.ensure([], () => r(require('@/pages/categories')), 'chunkname1')
 const Collections = r => require.ensure([], () => r(require('@/pages/collections')), 'chunkname1')
 const Demo = r => require.ensure([], () => r(require('@/pages/demo')), 'chunkname1')
+const Movies = r => require.ensure([], () => r(require('@/pages/movies')), 'chunkname1')
 const About = r => require.ensure([], () => r(require('@/pages/about')), 'chunkname1')
 const Detail = r => require.ensure([], () => r(require('@/pages/detail')), 'chunkname2')
 const Signin = r => require.ensure([], () => r(require('@/pages/signin')), 'chunkname1')
@@ -38,16 +39,16 @@ const routes = [
     path: '/',
     component: CommonLayout,
     // name:'layout',
-    children:[
+    children: [
       {
         path: '',
         component: Home,
-        name:'home'
+        name: 'home'
       },
       {
         path: '/archives',
         component: Archives,
-        name:'archives',
+        name: 'archives',
       },
       {
         path: '/detail/:id',
@@ -56,34 +57,39 @@ const routes = [
       {
         path: '/categories',
         component: Categories,
-        name:'categories'
+        name: 'categories'
       },
       {
         path: '/collections',
         component: Collections,
-        name:'collections'
+        name: 'collections'
       },
       {
         path: '/demo',
         component: Demo,
-        name:'demo'
+        name: 'demo'
+      },
+      {
+        path: '/movies',
+        component: Movies,
+        name: 'movies'
       },
       {
         path: '/about',
         component: About,
-        name:'about'
+        name: 'about'
       },
       {
         path: '/visiter',
         component: VisiterIndex,
-        name:'visiter'
+        name: 'visiter'
       },
     ]
   },
   {
     path: '/sign',
     component: Signin,
-    name:'Signin',
+    name: 'Signin',
     alias: '/admin',
   },
   {
@@ -97,7 +103,7 @@ const routes = [
     component: ArticleEdit
   },
   {
-    path: '/admin/edit/:id', 
+    path: '/admin/edit/:id',
     name: 'ArticleUpdate',
     component: ArticleEdit
   },
@@ -107,7 +113,7 @@ const routes = [
     component: DemoEdit
   },
   {
-    path: '/admin/editt/:id', 
+    path: '/admin/editt/:id',
     name: 'DemoUpdate',
     component: DemoEdit
   }

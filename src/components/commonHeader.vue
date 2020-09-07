@@ -36,6 +36,11 @@
               </router-link>
             </el-menu-item>
             <el-menu-item index="5">
+              <router-link to="/movies">
+                <i class="iconfont icon-play"></i>视频
+              </router-link>
+            </el-menu-item>
+            <el-menu-item index="6">
               <router-link to="/demo">
                 <i class="iconfont icon-play"></i>网抑云
               </router-link>

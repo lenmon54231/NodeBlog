@@ -86,7 +86,7 @@ export const getDate = () => {
 //mixins========================================================================================
 
 //checkAdmin 检测admin
-export const checkAdmin = {
+export const checkAdmin = { 
   beforeCreate: function () {
     let user_name = localStorage.getItem("user_name");
     let token = localStorage.getItem("token");
