@@ -37,7 +37,7 @@
             </el-menu-item>
             <el-menu-item index="5">
               <router-link to="/movies">
-                <i class="iconfont icon-play"></i>视频
+                <i class="iconfont icon-play"></i>截图
               </router-link>
             </el-menu-item>
             <el-menu-item index="6">

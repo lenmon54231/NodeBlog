@@ -49,6 +49,7 @@ textarea {
 }
 #app > .container > .page {
   min-height: calc(100vh - 230px);
+  margin: 0 20px;
 }
 /* 设置滚动条的样式 */
 ::-webkit-scrollbar {

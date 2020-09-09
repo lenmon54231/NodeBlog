@@ -33,6 +33,8 @@ const DemoEdit = r => require.ensure([], () => r(require('@/pages/admin/demoEdit
 //visiter后台
 const VisiterIndex = r => require.ensure([], () => r(require('@/pages/visiter/index')), 'chunkname3')
 
+const noFoundPage = r => require.ensure([], () => r(require('@/pages/404.vue')), 'chunkname3')
+
 Vue.use(VueRouter)
 const routes = [
   {
@@ -44,6 +46,11 @@ const routes = [
         path: '',
         component: Home,
         name: 'home'
+      },
+      {
+        path: '/404',
+        component: noFoundPage,
+        name: '404',
       },
       {
         path: '/archives',
@@ -116,7 +123,11 @@ const routes = [
     path: '/admin/editt/:id',
     name: 'DemoUpdate',
     component: DemoEdit
-  }
+  },
+  {
+    path: '*',
+    redirect: '/404',
+  },
 ]
 export default new VueRouter({
   // mode: 'history',

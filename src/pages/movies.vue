@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <div class="flexCenter">
+    <div class="flexCenter topH">
       <div>
         <el-upload
           class="upload-demo"
@@ -35,26 +35,14 @@ export default {
   data() {
     return {
       fit: "fit",
-      uploadUrl: "/api/infor",
+      uploadUrl: "",
       movieUrl: "",
       shootUrl: "",
       fileList: [],
     };
   },
   created() {},
-  mounted() {
-    // let video = document.createElement("video");
-    // video.setAttribute("controls", "controls");
-    // console.log(document.querySelector("#uploadMovies"));
-    // let movieContainer = document.querySelector(".page");
-    // document
-    //   .querySelector("#uploadMovies")
-    //   .addEventListener("change", function () {
-    //     console.log(this.files, "视频文件");
-    //     movieContainer.appendChild(video);
-    //     video.src = window.URL.createObjectURL(this.files[0]);
-    //   });
-  },
+  mounted() {},
   methods: {
     shootIt() {
       let video = this.$refs.uploadVideo;
@@ -97,19 +85,21 @@ export default {
       // 然后通过上一节的ajax进行上传
     },
     uploadSuccess(res, file, fileList) {
-      console.log(res, file, fileList, "222222222");
-      if (res.code == 200) {
-        this.fileList = fileList;
-        this.$message.success("上传成功");
-        console.log(this.$refs.uploadVideo);
-      }
+      // if (res.code == 200) {
+      //   this.fileList = fileList;
+      //   this.$message.success("上传成功");
+      //   console.log(this.$refs.uploadVideo);
+      // }
     },
     beforeUpload(file) {
-      console.log(file, "11111");
       this.movieUrl = window.URL.createObjectURL(file);
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.topH {
+  min-height: 100px;
+}
+</style>
