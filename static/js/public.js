@@ -1,10 +1,44 @@
-//ip
+import html2canvas from 'html2canvas'
+
+// ip
 export const webUrl = '/api/'
 export const musicUrl = '/music/'
 
+// export const convertImageToCanvas = (image, startX, startY, width, height) {
+//   console.log(document)
+//   let canvas = document.createElement('canvas')
+//   canvas.width = width
+//   canvas.height = height
+//   canvas.getContext('2d').drawImage(image, startX, startY, width, height, 0, 0, width, height)
+//   return canvas
+// }
 
+// 公用方法========================================================================================
+// 全屏截图
+export const shootAll = (dom) => {
+  return new html2canvas(dom, {
+    backgroundColor: '1',
+    allowTaint: true,
+    useCORS: true
+  }).then((canvas) => {
+    let canvasInfo = {
+      width: canvas.getAttribute("width"),
+      height: canvas.getAttribute("height"),
+      url: canvas.toDataURL()
+    }
+    // canvas为转换后的Canvas对象
+    return canvasInfo // 导出图片
+  })
+}
 
-//公用方法========================================================================================
+export const cutImage = (img, sx, sy, swidth, sheight, x, y, width, height) => {
+  console.log(sx)
+  let canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
+  canvas.getContext('2d').drawImage(img, sx, sy, swidth, sheight, x, y, width, height)
+  return canvas
+}
 
 /**
  * 模拟锚点
@@ -14,14 +48,14 @@ export const anchor = {
   },
   methods: {
     anchor: function (e) {
-      let id = 'anchor-' + e;
-      let anchor = document.getElementById(id);
-      let go = anchor.offsetTop;
+      let id = 'anchor-' + e
+      let anchor = document.getElementById(id)
+      let go = anchor.offsetTop
 
       // console.log(go)
       Math.animation(document.documentElement.scrollTop, go, 800, 'Quart.easeOut', function (value) {
-        document.documentElement.scrollTop = value;
-      });
+        document.documentElement.scrollTop = value
+      })
     }
   }
 }
@@ -30,28 +64,28 @@ export const anchor = {
  * .toDataURL()方法应该写在<img>的onload事件中，以确保 canvas 的绘制工作在图片下载完成后开始。
  */
 export const imgTo64 = (img) => {
-  let canvas = document.createElement("canvas");
-  let width = img.width;
-  let height = img.height;
+  let canvas = document.createElement('canvas')
+  let width = img.width
+  let height = img.height
 
   if (width > height) {
     if (width > 100) {
-      width = Math.round(width * 100 / height);
+      width = Math.round(width * 100 / height)
       height = 100
     }
   } else {
     if (height > 100) {
-      height = Math.round(height * 100 / width);
+      height = Math.round(height * 100 / width)
       width = 100
     }
   }
-  canvas.width = width; /*设置新的图片的宽度*/
-  canvas.height = height; /*设置新的图片的长度*/
-  let ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 0, 0, width, height); /*绘图*/
-  let dataURL = canvas.toDataURL("image/png", 0.8);
+  canvas.width = width /* 设置新的图片的宽度 */
+  canvas.height = height /* 设置新的图片的长度 */
+  let ctx = canvas.getContext('2d')
+  ctx.drawImage(img, 0, 0, width, height) /* 绘图 */
+  let dataURL = canvas.toDataURL('image/png', 0.8)
   // return dataURL.replace("data:image/png;base64,", "");
-  return dataURL;
+  return dataURL
 }
 
 /**
@@ -59,15 +93,15 @@ export const imgTo64 = (img) => {
  */
 export const Guid = () => {
   function S4() {
-    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
   }
-  return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+  return (S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4())
 }
 /**
  * getDate
  */
 export const getDate = () => {
-  let mydate, y, m, d, hh, mm, ss;
+  let mydate, y, m, d, hh, mm, ss
   mydate = new Date()
   y = mydate.getFullYear()
   m = mydate.getMonth() + 1
@@ -83,27 +117,27 @@ export const getDate = () => {
   return y + '-' + m + '-' + d + ' ' + hh + ':' + mm + ':' + ss
 }
 
-//mixins========================================================================================
+// mixins========================================================================================
 
-//checkAdmin 检测admin
-export const checkAdmin = { 
+// checkAdmin 检测admin
+export const checkAdmin = {
   beforeCreate: function () {
-    let user_name = localStorage.getItem("user_name");
-    let token = localStorage.getItem("token");
+    let user_name = localStorage.getItem('user_name')
+    let token = localStorage.getItem('token')
     this.$axios.post(webUrl + 'admin/checkUser', { 'user_name': user_name, 'token': token })
       .then((response) => {
         if (response.data.status == 0) {
-          this.$store.commit("changeIsSignIn", 0);
-          this.$store.commit("changeIndex", '1');
-          localStorage.clear();
+          this.$store.commit('changeIsSignIn', 0)
+          this.$store.commit('changeIndex', '1')
+          localStorage.clear()
           this.$router.replace({ name: 'home' })
         } else {
           if (response.data.type == 1) {
-            this.$store.commit("changeIsSignIn", 1);//admin
+            this.$store.commit('changeIsSignIn', 1)// admin
           } else if (response.data.type == 2) {
-            this.$store.commit("changeIsSignIn", 2);//游客
+            this.$store.commit('changeIsSignIn', 2)// 游客
             this.$router.replace({ name: 'home' })
-            this.$store.commit("changeIndex", '1');
+            this.$store.commit('changeIndex', '1')
           }
         }
       })
@@ -112,17 +146,17 @@ export const checkAdmin = {
       })
   }
 }
-//checkVisiter 检测游客
+// checkVisiter 检测游客
 export const checkVisiter = {
   beforeCreate: function () {
-    let user_name = localStorage.getItem("user_name");
-    let token = localStorage.getItem("token");
+    let user_name = localStorage.getItem('user_name')
+    let token = localStorage.getItem('token')
     this.$axios.post(webUrl + 'admin/checkUser', { 'user_name': user_name, 'token': token })
       .then((response) => {
         if (response.data.status == 0) {
-          this.$store.commit("changeIsSignIn", 0);
-          this.$store.commit("changeIndex", '1');
-          localStorage.clear();
+          this.$store.commit('changeIsSignIn', 0)
+          this.$store.commit('changeIndex', '1')
+          localStorage.clear()
           this.$router.replace({ name: 'home' })
         }
       })
@@ -131,21 +165,21 @@ export const checkVisiter = {
       })
   }
 }
-//checkSign登陆情况
+// checkSign登陆情况
 export const checkSign = {
   beforeCreate: function () {
-    let user_name = localStorage.getItem("user_name");
-    let token = localStorage.getItem("token");
+    let user_name = localStorage.getItem('user_name')
+    let token = localStorage.getItem('token')
     this.$axios.post(webUrl + 'admin/checkUser', { 'user_name': user_name, 'token': token })
       .then((response) => {
         if (response.data.status == 0) {
-          this.$store.commit("changeIsSignIn", 0);
-          localStorage.clear();
+          this.$store.commit('changeIsSignIn', 0)
+          localStorage.clear()
         } else {
           if (response.data.type == 1) {
-            this.$store.commit("changeIsSignIn", 1);//admin
+            this.$store.commit('changeIsSignIn', 1)// admin
           } else if (response.data.type == 2) {
-            this.$store.commit("changeIsSignIn", 2);//游客
+            this.$store.commit('changeIsSignIn', 2)// 游客
           }
         }
       })
