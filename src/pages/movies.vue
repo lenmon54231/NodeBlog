@@ -1,5 +1,5 @@
 <template>
-  <div class="page" id="allPage">
+  <div class="page" ref="allPage">
     <div class="flexCenter">
       <div class="topH">
         <div>
@@ -25,7 +25,7 @@
               <el-table-column property="date" label="参数"></el-table-column>
               <el-table-column property="content" label="描述"></el-table-column>
             </el-table>
-            <el-button size="small" slot="reference" type="info" icon="el-icon-message" circle></el-button>
+            <el-button size="mini" slot="reference" type="info" icon="el-icon-s-grid" circle></el-button>
           </el-popover>
         </div>
         <div v-if="showOption">
@@ -56,12 +56,13 @@
             </el-col>
           </el-row>
           <div class="mb_15">
+            <el-button size="small" type="primary" @click="makeInfoClean">清空</el-button>
             <el-button size="small" type="primary" @click="shootSome">确定</el-button>
           </div>
         </div>
       </div>
     </div>
-
+ 
     <div class="flexCenter">
       <div v-if="movieUrl">
         <div>
@@ -73,7 +74,7 @@
         <div v-if="shootUrl">
           <div>图片信息</div>
           <div>
-            <span>宽：{{videoWidth}}, 高：{{videoHeight}}</span>
+            <span>宽：{{info.swidth}}, 高：{{info.sheight}}</span>
           </div>
         </div>
       </div>
@@ -88,8 +89,6 @@ export default {
   data() {
     return {
       showOption: false,
-      videoWidth: null,
-      videoHeight: null,
       loadImage: true,
       fit: "fit",
       uploadUrl: "",
@@ -128,12 +127,41 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    shootAllPre() {
-      let shootDom = document.getElementById("allPage");
+    makeInfoClean() {
+      this.info = {
+        sx: null,
+        sy: null,
+        swidth: null,
+        sheight: null,
+        x: null,
+        y: null,
+        width: null,
+        height: null,
+      };
+    },
+    assertElement(obj) {
+      //判断是不是dom节点
+      var d = document.createElement("div");
+      try {
+        d.appendChild(obj.cloneNode(true));
+        return obj.nodeType == 1 ? true : false;
+      } catch (e) {
+        return false;
+      }
+    },
+    shootAllPre(e) {
+      let shootDom = this.$refs.allPage;
+      e.path.forEach((v) => {
+        //寻找到 container dom节点
+        let judge = this.assertElement(v);
+        if (judge && v.getAttribute("class") == "container") {
+          shootDom = v;
+        }
+      });
       shootAll(shootDom).then((res) => {
         this.shootUrl = res.url;
-        this.videoWidth = res.width;
-        this.videoHeight = res.height;
+        this.info.swidth = res.width;
+        this.info.sheight = res.height;
       });
     },
     cut() {
@@ -149,8 +177,8 @@ export default {
           this.$refs.OriginImage._vnode.elm.children[0],
           infoTem.sx ? infoTem.sx : 0,
           infoTem.sy ? infoTem.sy : 0,
-          infoTem.swidth ? infoTem.swidth : 0,
-          infoTem.sheight ? infoTem.sheight : 0,
+          infoTem.swidth ? infoTem.swidth : 90,
+          infoTem.sheight ? infoTem.sheight : 90,
           infoTem.x ? infoTem.x : 0,
           infoTem.y ? infoTem.y : 0,
           infoTem.width ? infoTem.width : 90,
@@ -160,7 +188,6 @@ export default {
       });
     },
     shootIt() {
-      // this.video = this.$refs.uploadVideo;
       let video = this.$refs.uploadVideo;
       let imgHeight = 0;
       let imgWidth = 0;
@@ -168,15 +195,12 @@ export default {
       let videoHeight = 0;
       let canvas = document.createElement("canvas");
       let canvasCtx = canvas.getContext("2d");
-      //视频准备好可以播放
-      // video.addEventListener("canplay", function () {
       //获取展示的video宽高作为画布的宽高和临时视频截图的宽高
-      this.videoWidth = canvas.width = imgWidth = video.offsetWidth;
-      this.videoHeight = canvas.height = imgHeight = video.offsetHeight;
+      this.info.swidth = canvas.width = imgWidth = video.offsetWidth;
+      this.info.sheight = canvas.height = imgHeight = video.offsetHeight;
       //获取实际视频的宽高，相当于视频分辨率吧
       videoWidth = video.videoWidth;
       videoHeight = video.videoHeight;
-      // video.pause();
       //坐原图像的x,y轴坐标，大小，目标图像的x，y轴标，大小。
       canvasCtx.drawImage(
         video,
@@ -193,10 +217,7 @@ export default {
       let dataUrl = canvas.toDataURL("image/png");
       this.shootUrl = dataUrl;
       // 获取图片的base64格式
-      // 通过上一篇文章的：https://www.haorooms.com/post/js_file_base64_blob 把base64转换为file
       // let shootImage = base64ConvertFile(dataUrl, "haorooms截取视频帧");
-      // console.log("dataUrl", dataUrl, shootImage);
-      // 然后通过上一节的ajax进行上传
     },
     uploadSuccess(res, file, fileList) {},
     beforeUpload(file) {

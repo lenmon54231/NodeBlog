@@ -1,14 +1,8 @@
 <template>
   <footer>
     <div class="wrapper">
-      <!-- <p>
-        本站记录我前端之旅的沿途风景！ Contact me at:
-        <a href="https://github.com/lenmon54231" target="_blank">
-          <i class="iconfont icon-github"></i>
-        </a>
-      </p> -->
       <p>欢迎光临本站,当前总访问量{{visit}}次</p>
-      <p>built with vue and node</p>
+      <p>今天是{{IsToday}}</p>
     </div>
     <transition name="slide-fade">
       <div v-if="isTop" class="toTop iconfont icon-top" @click="toTop"></div>
@@ -21,11 +15,15 @@ import { webUrl } from "../../static/js/public.js";
 export default {
   data() {
     return {
+      IsToday: null,
       isTop: false,
       visit: 486,
     };
   },
   created() {
+    this.IsToday = new Date()
+      .toLocaleString("ja-JP-u-ca-chinese")
+      .split(" ")[0];
     window.addEventListener("scroll", this.scroll);
   },
   methods: {

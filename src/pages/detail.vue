@@ -3,17 +3,40 @@
     <div class="wrapper">
       <h1 class="title">{{title}}</h1>
       <div class="some">
-        <span class="date"><i class="iconfont icon-date"></i>{{date}}</span>
-        <span class="category"><i class="iconfont icon-tubiao13"></i><span v-for="tag in category" :key="tag.id">{{tag}}</span></span>
+        <span class="date">
+          <i class="iconfont icon-date"></i>
+          {{date}}
+        </span>
+        <span class="category">
+          <i class="iconfont icon-tubiao13"></i>
+          <span v-for="tag in category" :key="tag.id">{{tag}}</span>
+        </span>
       </div>
       <div class="detail" v-if="content">
-          <mavon-editor v-model="content" default_open="preview" defaultOpen= "preview"  :toolbarsFlag="false" :subfield="false"></mavon-editor>
-          <div class="footer">
-            <div @click="toGo(prev._id)" class="btn prev"><p>←上一篇</p><p>{{prev.title?prev.title:'没有更多'}}</p></div>
-            <div @click="toGo(next._id)" class="btn next"><p>下一篇→</p><p>{{next.title?next.title:'没有更多'}}</p></div>
+        <mavon-editor
+          v-model="content"
+          default_open="preview"
+          defaultOpen="preview"
+          :toolbarsFlag="false"
+          :subfield="false"
+        ></mavon-editor>
+        <div class="footer">
+          <div @click="toGo(prev._id)" class="btn prev">
+            <p>←上一篇</p>
+            <p>{{prev.title?prev.title:'没有更多'}}</p>
           </div>
+          <div @click="toGo(next._id)" class="btn next">
+            <p>下一篇→</p>
+            <p>{{next.title?next.title:'没有更多'}}</p>
+          </div>
+        </div>
       </div>
-      <comment :comments="comments" :articleId="articleId" @update="update" @setTextarea="setTextarea"></comment>
+      <comment
+        :comments="comments"
+        :articleId="articleId"
+        @update="update"
+        @setTextarea="setTextarea"
+      ></comment>
     </div>
   </div>
 </template>
@@ -33,84 +56,20 @@ export default {
       comments: [],
       articleId: null,
       prev: {},
-      next: {}
-      // comments: [
-      //   {
-      //     id: 0,
-      //     from_uid: 11111,
-      //     from_uname: "非洲刘德华",
-      //     avatar: avatar,
-      //     to_uid: null,
-      //     content: "啊十分大师傅",
-      //     date: "2018-07-18 20:12",
-      //     open:false,
-      //     child: [
-      //       {
-      //         from_uid: 2222,
-      //         from_uname: "乌鸦坐飞机",
-      //         avatar: avatar,
-      //         to_uid: 1111,
-      //         to_uname: "非洲刘德华",
-      //         content: "asdf撒旦飞洒发的",
-      //         date: "2018-07-18 20:12"
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     id: 1,
-      //     from_uid: 11111,
-      //     from_uname: "非洲刘德华",
-      //     avatar: avatar,
-      //     to_uid: null,
-      //     content: "啊十分大师傅",
-      //     date: "2018-07-18 20:12",
-      //     open:false,
-      //     child: [
-      //       {
-      //         from_uid: 2222,
-      //         from_uname: "乌鸦坐飞机",
-      //         avatar: avatar,
-      //         to_uid: 1111,
-      //         to_uname: "非洲刘德华",
-      //         content: "asdf撒旦飞洒发的",
-      //         date: "2018-07-18 20:12"
-      //       },
-      //       {
-      //         from_uid: 3333,
-      //         from_uname: "飞机",
-      //         avatar: avatar,
-      //         to_uid: 11111,
-      //         to_uname: "非洲刘德华",
-      //         content: "asdf撒旦飞洒发的",
-      //         date: "2018-07-18 20:12"
-      //       },
-      //       {
-      //         from_uid: 11111,
-      //         from_uname: "非洲刘德华",
-      //         avatar: avatar,
-      //         to_uid: 2222,
-      //         to_uname: "乌鸦坐飞机",
-      //         content: "asdf撒旦飞洒发的",
-      //         date: "2018-07-18 20:12"
-      //       }
-      //     ]
-      //   }
-      // ]
+      next: {},
     };
   },
-  beforeCreate() {
-
-  },
-  mounted: function() {
+  beforeCreate() {},
+  mounted: function () {
     this.init();
   },
   methods: {
-    init: function() {
+    init: function () {
       if (this.$route.params.id) {
         this.articleId = this.$route.params.id;
         this.$axios
           .get(webUrl + "articleDetail/" + this.$route.params.id)
-          .then(res => {
+          .then((res) => {
             let article = res.data;
             let {
               comments,
@@ -120,7 +79,7 @@ export default {
               gist,
               category,
               prev,
-              next
+              next,
             } = res.data;
 
             this.title = title;
@@ -141,7 +100,7 @@ export default {
           });
       }
     },
-    update: function() {
+    update: function () {
       this.init();
     },
     /**
@@ -151,7 +110,7 @@ export default {
      * to_uid 该评论下目标用户id
      * to_uname 该评论下目标name
      */
-    setTextarea: function(params) {
+    setTextarea: function (params) {
       let { index, open, to_uid, to_uname } = params;
       let comments = this.comments;
       // console.log(params)
@@ -163,17 +122,17 @@ export default {
       // debugger
       this.comments = comments;
     },
-    toGo: function(id) {
+    toGo: function (id) {
       if (id) {
         this.$router.push({ path: `/detail/${id}` });
         // this.$router.push({ path: '/detail/'+id});
 
         // this.$router.push({ path: '/visiter'});
       }
-    }
+    },
   },
   components: {
-    Comment
+    Comment,
   },
   watch: {
     //监听路由参数变化后刷新页面
@@ -184,13 +143,13 @@ export default {
         0,
         0,
         "Quart.easeOut",
-        function(value) {
+        function (value) {
           document.documentElement.scrollTop = value;
           document.body.scrollTop = value;
         }
       );
-    }
-  }
+    },
+  },
 };
 </script>
 
