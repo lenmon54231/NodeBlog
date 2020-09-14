@@ -7,45 +7,7 @@
             <list_home :items="items"></list_home>
           </div>
         </el-col>
-        <el-col :xs="0" :sm="4" :md="6" :lg="6" :xl="6">
-          <div class="aside">
-            <div class="card">
-              <!-- <p class="title">ABOUT ME</p> -->
-              <img class="pic" src="../../static/img/p1.png" alt />
-              <div class="row">
-                <p>行路有良友，便是捷径。带上我吧，一起去看更大的世界</p>
-                <!-- <div class="icons">
-                  <a href="https://github.com/lenmon54231" target="_blank">
-                    <i class="iconfont icon-github"></i>
-                  </a>
-                  <a href="https://www.zhihu.com/people/yang-pang-zi-40/activities" target="_blank">
-                    <i class="iconfont icon-zhihu"></i>
-                  </a>
-                  <a href="http://music.163.com/#/user/home?id=272667179" target="_blank">
-                    <i class="iconfont icon-yinle"></i>
-                  </a>
-                  <a
-                    href="https://weibo.com/u/5746403289?refer_flag=1005055010_&is_all=1"
-                    target="_blank"
-                  >
-                    <i class="iconfont icon-weibo"></i>
-                  </a>
-                </div> -->
-              </div>
-            </div>
-            <!-- <div class="card">
-              <p class="title">FRIENDS</p>
-              <div class="row">
-                <a class="link" href target="_blank">哈维</a>
-                <a class="link" href target="_blank">的光和热</a>
-                <a class="link" href target="_blank">Secret Blog</a>
-                <a class="link" href target="_blank">Secret Blog</a>
-                <a class="link" href target="_blank">Secret Blog</a>
-                <a class="link" href target="_blank">Secret Blog</a>
-              </div>
-            </div> -->
-          </div>
-        </el-col>
+        <el-col :xs="0" :sm="4" :md="6" :lg="6" :xl="6"></el-col>
       </el-row>
     </div>
   </div>
