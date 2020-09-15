@@ -75,16 +75,11 @@
             <span>{{ scope.row.fileName }}</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column label="图片" >
+        <el-table-column label="大小">
           <template slot-scope="scope">
-            <span>{{ scope.row.pic }}</span>
+            <span>{{ scope.row.size ? parseFloat(scope.row.size).toFixed(1) + "kb" : '-' }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="摘要" >
-          <template slot-scope="scope">
-            <span>{{ scope.row.gist.slice(0,30) }}</span>
-          </template>
-        </el-table-column>-->
         <el-table-column label="操作">
           <template slot-scope="scope">
             <div class="flexCenter" style="margin:0 50px">
@@ -99,9 +94,6 @@
                 >删除</el-button>
               </div>
             </div>
-            <!-- <el-button size="mini" type="primary" @click="download(scope.$index, scope.row)">下载</el-button> -->
-            <!-- <el-button size="mini" type="success" @click="handleEdit2(scope.$index, scope.row)">编辑</el-button> -->
-            <!-- <el-button size="mini" type="danger" @click="handleDelete2(scope.$index, scope.row)">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -126,6 +118,7 @@
             :action="uploadUrl"
             :on-success="uploadSuccess"
             :file-list="fileList"
+            :on-remove="removeFile"
           >
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
@@ -135,7 +128,6 @@
           <el-button type="primary" :loading="CloseShopFormLoading" @click="saveDemo">确定</el-button>
         </div>
       </el-form>
-
     </el-dialog>
   </div>
 </template>
@@ -221,11 +213,28 @@ export default {
       };
       this.fileList = [];
     },
+    removeFile() {
+      this.$axios
+        .post(webUrl + "admin/deleteDemoTem", {
+          IDName: this.submitForm.IDName,
+        })
+        .then((res) => {
+          if (res.data.status == 1) {
+            self.$message({
+              type: "success",
+              message: "成功!",
+            });
+            self.fetchData2();
+          }
+        });
+    },
     uploadSuccess(res, file, fileList) {
+      console.log(res.rows);
       if (res.code == 200) {
         this.fileList = fileList;
         this.submitForm.fileName = res.rows.originalname;
         this.submitForm.IDName = res.rows.IDName;
+        this.submitForm.size = res.rows.size;
         this.$message.success("上传成功");
       } else if (res.code == 999) {
       } else {
@@ -234,11 +243,11 @@ export default {
       }
     },
     beforeUpload(file) {
-      // const isLt2M = file.size / 1024 / 1024 < 5;
-      // if (!isLt2M) {
-      //   this.$message.error("上传头像文件大小不能超过 5MB!");
-      // }
-      // return isLt2M;
+      const isLt2M = file.size / 1024 / 1024 < 5;
+      if (!isLt2M) {
+        this.$message.error("上传文件大小不能超过 5MB!");
+      }
+      return isLt2M;
     },
     toHome: function () {
       this.$router.replace({ name: "home" });
@@ -322,7 +331,7 @@ export default {
       //删除--demo
       let self = this;
       let _id = row._id;
-      this.$confirm("此操作将永久删除该文章, 是否继续?", "提示", {
+      this.$confirm("此操作将删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",

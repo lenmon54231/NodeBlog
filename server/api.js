@@ -382,7 +382,7 @@ router.post('/api/demoList', (req, res) => {
     res.send(data)
   })
 })
-// demo下载
+// 文件下载
 router.post('/api/download/:id', function (req, res) {
   db.Demo.findOne({ _id: req.params.id }, function (err, docs) {
     if (err) {
@@ -407,9 +407,8 @@ router.post('/api/download/:id', function (req, res) {
     }
   })
 })
-//demo保存
+//文件保存
 router.post('/api/admin/saveDemo', (req, res) => {
-  console.log(res.body, '存入的shuju')
   req.body.date = getDate();
   let newDemo = new db.Demo(req.body);
   newDemo.save(function (err) {
@@ -420,7 +419,7 @@ router.post('/api/admin/saveDemo', (req, res) => {
     }
   })
 })
-// demo更新
+// 文件更新
 router.post('/api/admin/updateDemo', (req, res) => {
   let info = req.body.demoInformation;
   db.Demo.find({ _id: info._id }, (err, docs) => {
@@ -441,14 +440,13 @@ router.post('/api/admin/updateDemo', (req, res) => {
     })
   })
 })
-// demo删除
+// 文件删除
 router.post('/api/admin/deleteDemo', (req, res) => {
   db.Demo.findOne({ _id: req.body._id }, (err, docs) => {
     if (err) {
       res.status(500).send()
       return
     }
-    // let fileName = docs.fileUrl.split("\\").splice(-1);
     fs.unlinkSync('../static/files/' + docs.IDName);
     db.Demo.remove({ _id: req.body._id }, (err) => {
       if (err) {
@@ -458,7 +456,11 @@ router.post('/api/admin/deleteDemo', (req, res) => {
       res.send({ 'status': 1, 'msg': '删除成功' })
     })
   })
-
+})
+//删除临时文件
+router.post('/api/admin/deleteDemoTem', (req, res) => {
+  fs.unlinkSync('../static/files/' + req.body.IDName);
+  res.send({ code: 200, msg: ''})
 })
 //上传的文件
 router.post('/api/infor', function (req, res, next) {
@@ -467,7 +469,8 @@ router.post('/api/infor', function (req, res, next) {
   let fileName = req.files[0].filename + path.parse(req.files[0].originalname).ext;
   let info = {
     originalname: req.files[0].originalname,
-    IDName: fileName
+    IDName: fileName,
+    size: req.files[0].size / 1000
   }
   fs.rename(req.files[0].path, newname, function (err) {
     if (err) {

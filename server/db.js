@@ -5,8 +5,8 @@ mongoose.connect('mongodb://localhost/tao');
 
 // 为这次连接绑定事件
 const db = mongoose.connection;
-db.once('error',() => console.log('Mongo connection error'));
-db.once('open',() => console.log('Mongo connection successed'));
+db.once('error', () => console.log('Mongo connection error'));
+db.once('open', () => console.log('Mongo connection successed'));
 /************** 定义模式Schema **************/
 // const loginSchema = mongoose.Schema({
 //     account : String,
@@ -15,28 +15,29 @@ db.once('open',() => console.log('Mongo connection successed'));
 
 //user
 const userSchema = new mongoose.Schema({
-    name: String,
-    password: String,
-    nickName: String,
-    type: String,//1管理员，2游客
-    token: String,
-    avatar: String
+  name: String,
+  password: String,
+  nickName: String,
+  type: String,//1管理员，2游客
+  token: String,
+  avatar: String
 })
 //文章
 const articleSchema = new mongoose.Schema({
-    title: String,
-    date: String,
-    category: Array,
-    gist: String,
-    content: String,
-    comments: Array
+  title: String,
+  date: String,
+  category: Array,
+  gist: String,
+  content: String,
+  comments: Array
 })
 //demo
 const demoSchema = new mongoose.Schema({
-    name: String,
-    date: String,
-    fileName: String,
-    IDName:String,
+  name: String,
+  date: String,
+  fileName: String,
+  IDName: String,
+  size: String,
 })
 /************** 定义模型Model **************/
 // const Models = {
@@ -44,9 +45,9 @@ const demoSchema = new mongoose.Schema({
 // }
 
 const Models = {
-    User: mongoose.model('User', userSchema),
-    Article: mongoose.model('Article', articleSchema),
-    Demo: mongoose.model('Demo', demoSchema)
+  User: mongoose.model('User', userSchema),
+  Article: mongoose.model('Article', articleSchema),
+  Demo: mongoose.model('Demo', demoSchema)
 }
 
 module.exports = Models;
