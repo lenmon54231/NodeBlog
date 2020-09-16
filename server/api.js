@@ -479,7 +479,6 @@ router.post('/api/infor', function (req, res, next) {
       res.send({ code: 200, msg: '上传成功', rows: info })
     }
   })
-
 })
 
 module.exports = router;
