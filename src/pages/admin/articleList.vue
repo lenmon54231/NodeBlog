@@ -4,20 +4,31 @@
       <a @click="toHome" href="javascript:;">返回首页</a>
       <a @click="signOut" href="javascript:;">退出登录</a>
     </div>
-    <!-- <h1 class="title">{{type=='article'?'文章':'文件'}}</h1> -->
     <div class="tab-box">
       <el-button-group>
-        <el-button :type="type=='article'?'primary':'info'" @click="toggle">
+        <el-button :type="type=='article'?'primary':'info'" @click="toggle(0)">
           <i class="iconfont icon-archives"></i> 文章列表
         </el-button>
-        <el-button :type="type=='demo'?'primary':'info'" @click="toggle">
+        <el-button :type="type=='demo'?'primary':'info'" @click="toggle(1)">
           <i class="iconfont icon-play"></i> 文件列表
+        </el-button>
+        <el-button :type="type=='mergeVedio'?'primary':'info'" @click="toggle(2)">
+          <i class="iconfont icon-play"></i> 视频列表
         </el-button>
       </el-button-group>
     </div>
     <div v-if="type=='article'">
-      <el-button @click="handleAdd()" class="btn-add">新增+</el-button>
-      <el-table :data="articleList" style="width: 100%" header-align="right" border stripe>
+      <div class="addAndMerge">
+        <el-button @click="handleAdd()">新增+</el-button>
+      </div>
+      <el-table
+        :key="'keytable0'"
+        :data="articleList"
+        style="width: 100%"
+        header-align="right"
+        border
+        stripe
+      >
         <el-table-column label="标题" width="250">
           <template slot-scope="scope">
             <span>{{ scope.row.title }}</span>
@@ -57,8 +68,21 @@
     </div>
 
     <div v-if="type=='demo'">
-      <el-button @click="handleAdd2()" class="btn-add">上传+</el-button>
-      <el-table :data="demoList" border>
+      <div class="addAndMerge">
+        <el-button @click="handleAdd2()">上传</el-button>
+        <el-button @click="mergeVedioClick()">合并</el-button>
+        <el-button @click="changeOptions()">更改预设值</el-button>
+      </div>
+      <el-table
+        :key="'keytable1'"
+        ref="multipleTable"
+        :data="demoList"
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+        border
+      >
+        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column label="名字">
           <template slot-scope="scope">
             <span>{{ scope.row.name }}</span>
@@ -99,7 +123,49 @@
       </el-table>
     </div>
 
-    <!--批量导入店铺-->
+    <div v-if="type=='mergeVedio'">
+      <el-table :key="'keytable2'" :data="mergeVedioList" border>
+        <el-table-column label="名字">
+          <template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="日期">
+          <template slot-scope="scope">
+            <i class="el-icon-time"></i>
+            <span>{{ scope.row.date }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="file">
+          <template slot-scope="scope">
+            <span>{{ scope.row.fileName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="大小">
+          <template slot-scope="scope">
+            <span>{{ scope.row.size ? parseFloat(scope.row.size).toFixed(1) + "kb" : '-' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <div class="flexCenter" style="margin:0 50px">
+              <div>
+                <el-button size="mini" type="primary" @click="download(scope.$index, scope.row)">下载</el-button>
+              </div>
+              <div>
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="handleDelete2(scope.$index, scope.row)"
+                >删除</el-button>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+
+    <!--导入文件-->
     <el-dialog title="上传文件" :visible.sync="showInfo" @close="cleanIt" width="580px">
       <el-form :model="submitForm" label-width="120px">
         <el-form-item required label="文件名">
@@ -129,6 +195,100 @@
         </div>
       </el-form>
     </el-dialog>
+
+    <!--更改预设值-->
+    <el-dialog title="更改合并参数" :visible.sync="showMergeInfo" @close="cleanIt" width="580px">
+      <el-form :model="MergeInfoSubmitForm" label-width="120px">
+        <el-form-item required label="视频分辨率">
+          <el-input
+            type="text"
+            show-word-limit
+            maxlength="10"
+            placeholder="1600x?（允许用问号代替另一个参数）"
+            v-model="MergeInfoSubmitForm.withSize"
+          ></el-input>
+        </el-form-item>
+        <el-form-item required label="宽高比例">
+          <el-input
+            type="text"
+            show-word-limit
+            maxlength="10"
+            placeholder="16:9"
+            v-model="MergeInfoSubmitForm.aspect"
+          ></el-input>
+        </el-form-item>
+        <el-form-item required label="视频帧率">
+          <el-input
+            type="text"
+            show-word-limit
+            maxlength="10"
+            placeholder="24（帧率会影响合并效率）"
+            v-model="MergeInfoSubmitForm.fps"
+          ></el-input>
+        </el-form-item>
+        <el-form-item required label="视频比特率">
+          <el-input
+            type="text"
+            show-word-limit
+            maxlength="10"
+            placeholder="300（数值越大生成的文件会越大）"
+            v-model="MergeInfoSubmitForm.videoBitrate"
+          ></el-input>
+        </el-form-item>
+        <div class="t_r mt_10">
+          <el-button type="default" @click="showMergeInfo = false">取消</el-button>
+          <el-button type="primary" @click="saveDemo">确定</el-button>
+        </div>
+      </el-form>
+    </el-dialog>
+
+    <!--合并提醒弹窗-->
+    <el-dialog title="确认合并参数" :visible.sync="checkMergeInfo" width="580px">
+      <div>
+        <div>视频分辨率：{{MergeInfoSubmitForm.withSize}}</div>
+        <div>视频宽高比：{{MergeInfoSubmitForm.aspect}}</div>
+        <div>视频帧率：{{MergeInfoSubmitForm.fps}}</div>
+        <div>视频比特率：{{MergeInfoSubmitForm.videoBitrate}}</div>
+      </div>
+      <div>
+        <div>排序</div>
+        <div>
+          <el-table :data="checkedVedioList" border>
+            <el-table-column label="名字">
+              <template slot-scope="scope">
+                <span>{{ scope.row.name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="序号">
+              <template slot-scope="scope">
+                <span>{{ scope.row.sort }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="大小">
+              <template slot-scope="scope">
+                <span>{{ scope.row.size ? parseFloat(scope.row.size).toFixed(1) + "kb" : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <div class="flexCenter" style="margin:0 50px">
+                  <div>
+                    <el-button size="mini" type="primary" @click="up(scope.$index,scope.row)">上移</el-button>
+                  </div>
+                  <div>
+                    <el-button size="mini" type="danger" @click="down(scope.$index,scope.row)">下移</el-button>
+                  </div>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+      <div class="t_r mt_10">
+        <el-button type="default" @click="checkMergeInfo = false">取消</el-button>
+        <el-button type="primary" @click="toMergeVedio">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -141,11 +301,22 @@ export default {
   mixins: [checkAdmin],
   data() {
     return {
+      showcheckedVedioName: [],
+      checkedVedioList: [],
+      mergeVedioList: [],
       submitForm: {
         name: null,
         IDName: null,
         fileName: null,
       },
+      MergeInfoSubmitForm: {
+        withSize: "1600x?",
+        aspect: "16:9",
+        fps: "24",
+        videoBitrate: "300",
+      },
+      checkMergeInfo: false,
+      showMergeInfo: false,
       showInfo: false,
       fileList: [],
       articleList: [],
@@ -166,6 +337,48 @@ export default {
     this.getDemoList();
   },
   methods: {
+    sortVedioList(arr, prev, after) {
+      arr[prev] = arr.splice(after, 1, arr[prev])[0];
+      return arr;
+    },
+    up(index, item) {
+      if (index != 0) {
+        this.sortVedioList(this.checkedVedioList, index, index - 1);
+      } else {
+        this.$message.error("已经是第一了");
+      }
+    },
+    down(index, item) {
+      if (index != this.checkedVedioList.length - 1) {
+        this.sortVedioList(this.checkedVedioList, index, index + 1);
+      } else {
+        this.$message.error("已经是最后了");
+      }
+    },
+    toMergeVedio() {
+      let mergeOptions = {
+        info: this.MergeInfoSubmitForm,
+        list: this.checkedVedioList,
+      };
+      this.$axios.post(webUrl + "mergeVedio", mergeOptions).then((res) => {
+        if (res) {
+        }
+      });
+    },
+    changeOptions() {
+      this.showMergeInfo = true;
+    },
+    mergeVedioClick() {
+      this.checkMergeInfo = true;
+    },
+    handleSelectionChange(val) {
+      this.checkedVedioList = [];
+      let num = 0;
+      val.forEach((v) => {
+        v.sort = num++;
+        this.checkedVedioList.push(v);
+      });
+    },
     signOut() {
       localStorage.removeItem("token");
       localStorage.removeItem("user_name");
@@ -252,9 +465,22 @@ export default {
     toHome: function () {
       this.$router.replace({ name: "home" });
     },
-    toggle() {
+    toggle(index) {
       //切换
-      this.type = this.type == "article" ? "demo" : "article";
+      switch (index) {
+        case 0:
+          this.type = "article";
+          break;
+        case 1:
+          this.type = "demo";
+          break;
+        case 2:
+          this.type = "mergeVedio";
+          break;
+        default:
+          break;
+      }
+      // this.type = this.type == "article" ? "demo" : "article";
     },
     handleAdd() {
       //新增
@@ -398,9 +624,12 @@ export default {
     text-align: center;
     margin-bottom: 20px;
   }
-  .btn-add {
-    float: right;
-    margin-bottom: 20px;
-  }
+}
+.addAndMerge {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-flow: row nowrap;
+  margin-bottom: 15px;
 }
 </style>

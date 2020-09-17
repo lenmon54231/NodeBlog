@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const path = require('path');
 const fs = require('fs');
 const getDate = require("../static/js/getDate.js");
+const mergeVedio = require('../cutMovies/index.js');
+const { sync } = require('rimraf');
 /************** 创建(create) 读取(get) 更新(update) 删除(delete) **************/
 // 注册
 router.post('/api/admin/signUp', (req, res) => {
@@ -372,7 +374,7 @@ router.post('/api/comment/reply', (req, res) => {
 
 
 
-//获取所有demo列表
+//获取所有上传文件列表
 router.post('/api/demoList', (req, res) => {
   db.Demo.find({}, (err, data) => {
     if (err) {
@@ -407,7 +409,7 @@ router.post('/api/download/:id', function (req, res) {
     }
   })
 })
-//文件保存
+//上传文件保存
 router.post('/api/admin/saveDemo', (req, res) => {
   req.body.date = getDate();
   let newDemo = new db.Demo(req.body);
@@ -460,10 +462,10 @@ router.post('/api/admin/deleteDemo', (req, res) => {
 //删除临时文件
 router.post('/api/admin/deleteDemoTem', (req, res) => {
   fs.unlinkSync('../static/files/' + req.body.IDName);
-  res.send({ code: 200, msg: ''})
+  res.send({ code: 200, msg: '' })
 })
 //上传的文件
-router.post('/api/infor', function (req, res, next) {
+router.post('/api/infor', function (req, res) {
   console.log(req.files[0], '传递来的数据')
   const newname = req.files[0].path + path.parse(req.files[0].originalname).ext
   let fileName = req.files[0].filename + path.parse(req.files[0].originalname).ext;
@@ -480,5 +482,12 @@ router.post('/api/infor', function (req, res, next) {
     }
   })
 })
+
+//合并视频
+router.post('/api/mergeVedio', async function (req, res) {
+  const merger = await mergeVedio(req.body)
+  res.send({ code: 200, msg: '上传成功' })
+})
+
 
 module.exports = router;

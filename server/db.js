@@ -39,6 +39,15 @@ const demoSchema = new mongoose.Schema({
   IDName: String,
   size: String,
 })
+//mergeVedio
+const mergeVedioSchema = new mongoose.Schema({
+  name: String,
+  date: String,
+  fileName: String,
+  IDName: String,
+  size: String,
+})
+
 /************** 定义模型Model **************/
 // const Models = {
 //     Login : mongoose.model('Login',loginSchema)
@@ -47,7 +56,8 @@ const demoSchema = new mongoose.Schema({
 const Models = {
   User: mongoose.model('User', userSchema),
   Article: mongoose.model('Article', articleSchema),
-  Demo: mongoose.model('Demo', demoSchema)
+  Demo: mongoose.model('Demo', demoSchema),
+  MergeVedio: mongoose.model('MergeVedio', mergeVedioSchema)
 }
 
 module.exports = Models;
