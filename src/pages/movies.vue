@@ -18,6 +18,7 @@
       <div class="topH">
         <div v-if="movieUrl" class="mb_15">
           <el-button size="small" type="primary" @click="shootIt">截图</el-button>
+          <el-button :disabled="!shootUrl" size="small" type="primary" @click="addText">添加文字</el-button>
           <el-button size="small" type="primary" @click="shootAllPre">全屏截图</el-button>
           <el-button :disabled="loadImage" size="small" type="primary" @click="setOption">裁剪截图</el-button>
           <el-popover placement="right" width="400" trigger="click">
@@ -60,9 +61,26 @@
             <el-button size="small" type="primary" @click="shootSome">确定</el-button>
           </div>
         </div>
+        <div v-if="showTextOption">
+          <el-row :gutter="24" class="mb_15">
+            <el-col :span="16">
+              <el-input size="small" placeholder="规定在画布上输出的文本" v-model="TextInfo.content"></el-input>
+            </el-col>
+            <el-col :span="3">
+              <el-input size="small" placeholder=" x 坐标位置（相对于画布）" v-model="TextInfo.XPosition"></el-input>
+            </el-col>
+            <el-col :span="3">
+              <el-input size="small" placeholder=" y 坐标位置（相对于画布）" v-model="TextInfo.YPosition"></el-input>
+            </el-col>
+          </el-row>
+          <div class="mb_15">
+            <el-button size="small" type="primary" @click="sureaAddText">确定</el-button>
+            <el-button size="small" type="primary" @click="cutWithText">下载</el-button>
+          </div>
+        </div>
       </div>
     </div>
- 
+
     <div class="flexCenter">
       <div v-if="movieUrl">
         <div>
@@ -70,7 +88,12 @@
         </div>
       </div>
       <div>
-        <el-image v-if="shootUrl" ref="OriginImage" @load="cut" :src="shootUrl" :fit="fit"></el-image>
+        <div ref="imageWithTextContainer" class="imgContainerR">
+          <div class="cutImageContainer btntest">
+            <el-image v-if="shootUrl" ref="OriginImage" @load="cut" :src="shootUrl" :fit="fit"></el-image>
+          </div>
+          <div ref="imageContainer" class="TextContainer"></div>
+        </div>
         <div v-if="shootUrl">
           <div>图片信息</div>
           <div>
@@ -88,6 +111,8 @@ import { shootAll, cutImage } from "../../static/js/public.js";
 export default {
   data() {
     return {
+      showTextOption: false,
+      currentCanvas: null,
       showOption: false,
       loadImage: true,
       fit: "fit",
@@ -96,6 +121,11 @@ export default {
       shootUrl: "",
       fileList: [],
       video: null,
+      TextInfo: {
+        content: null,
+        XPosition: null,
+        YPosition: null,
+      },
       info: {
         sx: null,
         sy: null,
@@ -127,6 +157,38 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    cutWithText() {
+      let tem = this.$refs.imageWithTextContainer;
+      shootAll(tem).then((res) => {
+        console.log(res);
+        let a = document.createElement("a");
+        a.href = res.url;
+        a.download = "";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        // let aTem = document.createElement("a");
+        // aTem.href = res.url;
+        // atem.downlaod = "带文字的截图";
+      });
+    },
+    sureaAddText() {
+      let imageContainer = this.$refs.imageContainer;
+      let canvas = document.createElement("canvas");
+      canvas.width = this.info.swidth;
+      canvas.height = this.info.sheight;
+      let ctx = canvas.getContext("2d");
+      ctx.fillStyle = "white"; // 填充颜色为白色
+      ctx.strokeStyle = "blue"; // 画笔的颜色
+      ctx.lineWidth = 5; // 指定描边线的宽度
+      ctx.font = "20px Georgia";
+      ctx.fillText(this.TextInfo.content, canvas.width / 3, canvas.height - 10);
+      console.log(canvas);
+      imageContainer.appendChild(canvas);
+    },
+    addText() {
+      this.showTextOption = !this.showTextOption;
+    },
     makeInfoClean() {
       this.info = {
         sx: null,
@@ -173,7 +235,7 @@ export default {
     shootSome() {
       this.$nextTick(() => {
         let infoTem = JSON.parse(JSON.stringify(this.info));
-        let canvas = cutImage(
+        this.currentCanvas = cutImage(
           this.$refs.OriginImage._vnode.elm.children[0],
           infoTem.sx ? infoTem.sx : 0,
           infoTem.sy ? infoTem.sy : 0,
@@ -184,7 +246,7 @@ export default {
           infoTem.width ? infoTem.width : 90,
           infoTem.height ? infoTem.height : 90
         );
-        this.shootUrl = canvas.toDataURL();
+        this.shootUrl = this.currentCanvas.toDataURL();
       });
     },
     shootIt() {
@@ -237,5 +299,19 @@ export default {
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
+}
+.imgContainerR {
+  position: relative;
+  min-height: 160px;
+}
+.cutImageContainer {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.TextContainer {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 </style>

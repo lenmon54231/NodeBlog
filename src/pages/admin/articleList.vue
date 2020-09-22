@@ -88,15 +88,22 @@
             <span>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="类型">
+          <template slot-scope="scope">
+            <span v-if="scope.row.type == 0">原始素材</span>
+            <span v-if="scope.row.type == 1">过渡动画</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="完成状态">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status == 0">未完成</span>
+            <span v-if="scope.row.status == 1">已完成</span>
+          </template>
+        </el-table-column>
         <el-table-column label="日期">
           <template slot-scope="scope">
             <i class="el-icon-time"></i>
             <span>{{ scope.row.date }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="file">
-          <template slot-scope="scope">
-            <span>{{ scope.row.fileName }}</span>
           </template>
         </el-table-column>
         <el-table-column label="大小">
@@ -116,6 +123,9 @@
                   type="danger"
                   @click="handleDelete2(scope.$index, scope.row)"
                 >删除</el-button>
+              </div>
+              <div>
+                <el-button size="mini" type="primary" @click="cut(scope.$index, scope.row)">剪切</el-button>
               </div>
             </div>
           </template>
@@ -165,7 +175,7 @@
       </el-table>
     </div>
 
-    <!--导入文件-->
+    <!--上传文件-->
     <el-dialog title="上传文件" :visible.sync="showInfo" @close="cleanIt" width="580px">
       <el-form :model="submitForm" label-width="120px">
         <el-form-item required label="文件名">
@@ -176,6 +186,9 @@
             placeholder="最多10字中文"
             v-model="submitForm.name"
           ></el-input>
+        </el-form-item>
+        <el-form-item required label="素材类型">
+          <el-input type="text" placeholder="原始素材：0，过渡动画：1" v-model="submitForm.type"></el-input>
         </el-form-item>
         <el-form-item required label="上传">
           <el-upload
@@ -237,12 +250,11 @@
         </el-form-item>
         <div class="t_r mt_10">
           <el-button type="default" @click="showMergeInfo = false">取消</el-button>
-          <el-button type="primary" @click="saveDemo">确定</el-button>
         </div>
       </el-form>
     </el-dialog>
 
-    <!--合并提醒弹窗-->
+    <!--合并弹窗-->
     <el-dialog title="确认合并参数" :visible.sync="checkMergeInfo" width="580px">
       <div>
         <div>视频分辨率：{{MergeInfoSubmitForm.withSize}}</div>
@@ -289,6 +301,28 @@
         <el-button type="primary" @click="toMergeVedio">确定</el-button>
       </div>
     </el-dialog>
+
+    <!--剪切视频-->
+    <el-dialog title="剪切视频参数" :visible.sync="showCutInfo" @close="cleanIt" width="580px">
+      <el-form :model="cutInfoSubmitForm" label-width="120px">
+        <el-form-item required label="起始时间">
+          <el-input type="text" v-model="cutInfoSubmitForm.start"></el-input>
+        </el-form-item>
+        <el-form-item required label="持续时间">
+          <el-input type="text" v-model="cutInfoSubmitForm.duration"></el-input>
+        </el-form-item>
+        <el-form-item required label="名称">
+          <el-input type="text" v-model="cutInfoSubmitForm.name"></el-input>
+        </el-form-item>
+        <el-form-item required label="类型">
+          <el-input type="text" v-model="cutInfoSubmitForm.type"></el-input>
+        </el-form-item>
+        <div class="t_r mt_10">
+          <el-button type="default" @click="showCutInfo = false">取消</el-button>
+          <el-button type="primary" @click="toCutSigleVedio">确定</el-button>
+        </div>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -301,6 +335,7 @@ export default {
   mixins: [checkAdmin],
   data() {
     return {
+      showCutInfo: false,
       showcheckedVedioName: [],
       checkedVedioList: [],
       mergeVedioList: [],
@@ -308,6 +343,13 @@ export default {
         name: null,
         IDName: null,
         fileName: null,
+        type: null,
+      },
+      cutInfoSubmitForm: {
+        start: null,
+        duration: null,
+        name: null,
+        type: null,
       },
       MergeInfoSubmitForm: {
         withSize: "1600x?",
@@ -329,7 +371,6 @@ export default {
       uploadUrl: "/api/infor",
     };
   },
-  beforeCreate: function () {},
   mounted: function () {
     // 获取文章列表
     this.isLoading = true;
@@ -337,6 +378,25 @@ export default {
     this.getDemoList();
   },
   methods: {
+    toCutSigleVedio() {
+      if (this.checkedVedioList.length == 1) {
+        let cutSigleVedioInfo = JSON.parse(
+          JSON.stringify(this.checkedVedioList[0])
+        );
+        this.cutInfoSubmitForm.IDName = cutSigleVedioInfo.IDName;
+        this.$axios
+          .post(webUrl + "cutSigleVedio", this.cutInfoSubmitForm)
+          .then((res) => {
+            if (res.code == 200) {
+              this.$message.success("剪切成功");
+              this.showCutInfo = false;
+            }
+          });
+      }
+    },
+    cut() {
+      this.showCutInfo = true;
+    },
     sortVedioList(arr, prev, after) {
       arr[prev] = arr.splice(after, 1, arr[prev])[0];
       return arr;
@@ -361,8 +421,8 @@ export default {
         list: this.checkedVedioList,
       };
       this.$axios.post(webUrl + "mergeVedio", mergeOptions).then((res) => {
-        if (res) {
-        }
+        this.$message.success("开始合并，合并成功后，可以在视频列表查看");
+        this.checkMergeInfo = false;
       });
     },
     changeOptions() {
@@ -423,6 +483,7 @@ export default {
         name: null,
         IDName: null,
         fileName: null,
+        type: null,
       };
       this.fileList = [];
     },
@@ -456,9 +517,9 @@ export default {
       }
     },
     beforeUpload(file) {
-      const isLt2M = file.size / 1024 / 1024 < 5;
+      const isLt2M = file.size / 1024 / 1024 < 150;
       if (!isLt2M) {
-        this.$message.error("上传文件大小不能超过 5MB!");
+        this.$message.error("上传文件大小不能超过 150MB!");
       }
       return isLt2M;
     },

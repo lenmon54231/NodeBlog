@@ -30,9 +30,8 @@ export const shootAll = (dom) => {
     return canvasInfo // 导出图片
   })
 }
- 
+//视频截图
 export const cutImage = (img, sx, sy, swidth, sheight, x, y, width, height) => {
-  console.log(sx)
   let canvas = document.createElement('canvas')
   canvas.width = width
   canvas.height = height

@@ -6,8 +6,8 @@ const jwt = require("jsonwebtoken");
 const path = require('path');
 const fs = require('fs');
 const getDate = require("../static/js/getDate.js");
-const mergeVedio = require('../cutMovies/index.js');
-const { sync } = require('rimraf');
+// import { waitMerege, cutSigleVedio } from '../cutMovies/index.js';
+const CutFun = require('../cutMovies/index.js');
 /************** 创建(create) 读取(get) 更新(update) 删除(delete) **************/
 // 注册
 router.post('/api/admin/signUp', (req, res) => {
@@ -412,6 +412,7 @@ router.post('/api/download/:id', function (req, res) {
 //上传文件保存
 router.post('/api/admin/saveDemo', (req, res) => {
   req.body.date = getDate();
+  req.body.status = '1';
   let newDemo = new db.Demo(req.body);
   newDemo.save(function (err) {
     if (err) {
@@ -485,9 +486,34 @@ router.post('/api/infor', function (req, res) {
 
 //合并视频
 router.post('/api/mergeVedio', async function (req, res) {
-  const merger = await mergeVedio(req.body)
+  let finalVedioPath = await CutFun.waitMerege(req.body)
+  console.log(finalVedioPath, '1111111')
   res.send({ code: 200, msg: '上传成功' })
 })
-
+//剪切单个视频
+router.post('/api/cutSigleVedio', async function (req, res) {
+  console.log(req.body, CutFun)
+  let saveCutName = await CutFun.cutSigleVedio(req.body)
+  let cutVedioInfo = JSON.parse(JSON.stringify(req.body))
+  console.log(saveCutName)
+  cutVedioInfo.date = getDate();
+  cutVedioInfo.status = '1';
+  cutVedioInfo.IDName = saveCutName;
+  console.log(cutVedioInfo, 'cutVedioInfo')
+  return;
+  let newDemo = new db.Demo(cutVedioInfo);
+  newDemo.save(function (err) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send({ 'status': 1, 'msg': '保存成功' });
+    }
+  })
+  if (saveCutName) {
+    res.send({ code: 200, msg: '开始剪切' })
+  } else {
+    res.send({ code: 999, msg: '有点问题' })
+  }
+})
 
 module.exports = router;

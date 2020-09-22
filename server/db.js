@@ -13,7 +13,7 @@ db.once('open', () => console.log('Mongo connection successed'));
 //     password : String
 // });
 
-//user
+//用户
 const userSchema = new mongoose.Schema({
   name: String,
   password: String,
@@ -31,21 +31,23 @@ const articleSchema = new mongoose.Schema({
   content: String,
   comments: Array
 })
-//demo
+//上传文件
 const demoSchema = new mongoose.Schema({
   name: String,
   date: String,
-  fileName: String,
   IDName: String,
   size: String,
+  type: String, //0：原始素材，1：过渡动画
+  status: String,//0：未完成，1：已完成
 })
-//mergeVedio
+//合并视频列表
 const mergeVedioSchema = new mongoose.Schema({
   name: String,
   date: String,
   fileName: String,
   IDName: String,
   size: String,
+  status: String,//0：未完成，1：已完成
 })
 
 /************** 定义模型Model **************/
