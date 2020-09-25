@@ -63,13 +63,22 @@ const cutSigleVedio = (info) => {
   return new Promise(resolve => {
     let timeStamp = new Date() - 0
     let saveCutName = filePath + timeStamp + '.mp4'
+    let SigleVedioInfo = {
+      size: null,
+      saveCutName: saveCutName,
+    }
     const cutSigleVedioFF = new ffmpeg(filePath + info.IDName)
     cutSigleVedioFF.seek(info.start).duration(info.duration);
     cutSigleVedioFF.save(saveCutName)
     cutSigleVedioFF.on('start', () => { '剪切单个视频开始' })
       .on('end', () => {
         console.log('剪切单个视频结束')
-        resolve(saveCutName)
+        const doneSigleVedioFF = new ffmpeg(saveCutName)
+        doneSigleVedioFF.ffprobe(saveCutName, (err, res) => {
+          console.log(res)
+          SigleVedioInfo.size = res.format.size
+          resolve(SigleVedioInfo)
+        })
       })
   })
 

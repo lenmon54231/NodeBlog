@@ -15,16 +15,16 @@ html {
 
 body {
   /* background-color: #dfdddd; */
-  background: #7983a0; /* fallback for old browsers */
+  background: #75878a; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to right,
-    #cdd5d8,
-    #c2c3c5
+    #d1d9e0,
+    #75878a
   ); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(
     to right,
-    #e6ebec,
-    #b3b5b9
+    #d1d9e0,
+    #75878a
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 body #app {
@@ -195,7 +195,7 @@ a:focus {
   color: #20a0ff;
 }
 .red {
-  color: #C20C0C !important;
+  color: #c20c0c !important;
 }
 .blue_dark {
   color: #1f78c6;

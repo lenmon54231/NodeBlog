@@ -6,18 +6,27 @@
     </div>
     <div class="tab-box">
       <el-button-group>
-        <el-button :type="type=='article'?'primary':'info'" @click="toggle(0)">
+        <el-button
+          :type="type == 'article' ? 'primary' : 'info'"
+          @click="toggle(0)"
+        >
           <i class="iconfont icon-archives"></i> 文章列表
         </el-button>
-        <el-button :type="type=='demo'?'primary':'info'" @click="toggle(1)">
+        <el-button
+          :type="type == 'demo' ? 'primary' : 'info'"
+          @click="toggle(1)"
+        >
           <i class="iconfont icon-play"></i> 文件列表
         </el-button>
-        <el-button :type="type=='mergeVedio'?'primary':'info'" @click="toggle(2)">
+        <el-button
+          :type="type == 'mergeVedio' ? 'primary' : 'info'"
+          @click="toggle(2)"
+        >
           <i class="iconfont icon-play"></i> 视频列表
         </el-button>
       </el-button-group>
     </div>
-    <div v-if="type=='article'">
+    <div v-if="type == 'article'">
       <div class="addAndMerge">
         <el-button @click="handleAdd()">新增+</el-button>
       </div>
@@ -42,7 +51,7 @@
         </el-table-column>
         <el-table-column label="摘要" width="250">
           <template slot-scope="scope">
-            <span>{{ scope.row.gist.slice(0,30) }}</span>
+            <span>{{ scope.row.gist.slice(0, 30) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="分类" width="250">
@@ -54,20 +63,36 @@
               type="primary"
               v-for="tag in scope.row.category"
               :key="tag.id"
-            >{{ tag }}</el-tag>
+              >{{ tag }}</el-tag
+            >
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleLook(scope.$index, scope.row)">查看</el-button>
-            <el-button size="mini" type="success" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              @click="handleLook(scope.$index, scope.row)"
+              >查看</el-button
+            >
+            <el-button
+              size="mini"
+              type="success"
+              @click="handleEdit(scope.$index, scope.row)"
+              >编辑</el-button
+            >
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.$index, scope.row)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
     </div>
 
-    <div v-if="type=='demo'">
+    <div v-if="type == 'demo'">
       <div class="addAndMerge">
         <el-button @click="handleAdd2()">上传</el-button>
         <el-button @click="mergeVedioClick()">合并</el-button>
@@ -80,6 +105,7 @@
         tooltip-effect="dark"
         style="width: 100%"
         @selection-change="handleSelectionChange"
+        @sort-change="handleClickSortTable"
         border
       >
         <el-table-column type="selection" width="55"></el-table-column>
@@ -106,26 +132,41 @@
             <span>{{ scope.row.date }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="大小">
+        <el-table-column label="大小" sortable="size">
           <template slot-scope="scope">
-            <span>{{ scope.row.size ? parseFloat(scope.row.size).toFixed(1) + "kb" : '-' }}</span>
+            <span>{{
+              scope.row.size
+                ? parseFloat(scope.row.size).toFixed(1) + "kb"
+                : "-"
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <div class="flexCenter" style="margin:0 50px">
+            <div class="flexCenter" style="margin: 0 50px">
               <div>
-                <el-button size="mini" type="primary" @click="download(scope.$index, scope.row)">下载</el-button>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="download(scope.$index, scope.row)"
+                  >下载</el-button
+                >
               </div>
               <div>
                 <el-button
                   size="mini"
                   type="danger"
                   @click="handleDelete2(scope.$index, scope.row)"
-                >删除</el-button>
+                  >删除</el-button
+                >
               </div>
               <div>
-                <el-button size="mini" type="primary" @click="cut(scope.$index, scope.row)">剪切</el-button>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="cut(scope.$index, scope.row)"
+                  >剪切</el-button
+                >
               </div>
             </div>
           </template>
@@ -133,7 +174,7 @@
       </el-table>
     </div>
 
-    <div v-if="type=='mergeVedio'">
+    <div v-if="type == 'mergeVedio'">
       <el-table :key="'keytable2'" :data="mergeVedioList" border>
         <el-table-column label="名字">
           <template slot-scope="scope">
@@ -153,21 +194,31 @@
         </el-table-column>
         <el-table-column label="大小">
           <template slot-scope="scope">
-            <span>{{ scope.row.size ? parseFloat(scope.row.size).toFixed(1) + "kb" : '-' }}</span>
+            <span>{{
+              scope.row.size
+                ? parseFloat(scope.row.size).toFixed(1) + "kb"
+                : "-"
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <div class="flexCenter" style="margin:0 50px">
+            <div class="flexCenter" style="margin: 0 50px">
               <div>
-                <el-button size="mini" type="primary" @click="download(scope.$index, scope.row)">下载</el-button>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="download(scope.$index, scope.row)"
+                  >下载</el-button
+                >
               </div>
               <div>
                 <el-button
                   size="mini"
                   type="danger"
                   @click="handleDelete2(scope.$index, scope.row)"
-                >删除</el-button>
+                  >删除</el-button
+                >
               </div>
             </div>
           </template>
@@ -176,7 +227,12 @@
     </div>
 
     <!--上传文件-->
-    <el-dialog title="上传文件" :visible.sync="showInfo" @close="cleanIt" width="580px">
+    <el-dialog
+      title="上传文件"
+      :visible.sync="showInfo"
+      @close="cleanIt"
+      width="580px"
+    >
       <el-form :model="submitForm" label-width="120px">
         <el-form-item required label="文件名">
           <el-input
@@ -188,7 +244,11 @@
           ></el-input>
         </el-form-item>
         <el-form-item required label="素材类型">
-          <el-input type="text" placeholder="原始素材：0，过渡动画：1" v-model="submitForm.type"></el-input>
+          <el-input
+            type="text"
+            placeholder="原始素材：0，过渡动画：1"
+            v-model="submitForm.type"
+          ></el-input>
         </el-form-item>
         <el-form-item required label="上传">
           <el-upload
@@ -198,19 +258,30 @@
             :on-success="uploadSuccess"
             :file-list="fileList"
             :on-remove="removeFile"
+            multiple
           >
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
         </el-form-item>
         <div class="t_r mt_10">
           <el-button type="default" @click="showInfo = false">取消</el-button>
-          <el-button type="primary" :loading="CloseShopFormLoading" @click="saveDemo">确定</el-button>
+          <el-button
+            type="primary"
+            :loading="CloseShopFormLoading"
+            @click="saveDemo"
+            >确定</el-button
+          >
         </div>
       </el-form>
     </el-dialog>
 
     <!--更改预设值-->
-    <el-dialog title="更改合并参数" :visible.sync="showMergeInfo" @close="cleanIt" width="580px">
+    <el-dialog
+      title="更改合并参数"
+      :visible.sync="showMergeInfo"
+      @close="cleanIt"
+      width="580px"
+    >
       <el-form :model="MergeInfoSubmitForm" label-width="120px">
         <el-form-item required label="视频分辨率">
           <el-input
@@ -249,18 +320,24 @@
           ></el-input>
         </el-form-item>
         <div class="t_r mt_10">
-          <el-button type="default" @click="showMergeInfo = false">取消</el-button>
+          <el-button type="default" @click="showMergeInfo = false"
+            >取消</el-button
+          >
         </div>
       </el-form>
     </el-dialog>
 
     <!--合并弹窗-->
-    <el-dialog title="确认合并参数" :visible.sync="checkMergeInfo" width="580px">
+    <el-dialog
+      title="确认合并参数"
+      :visible.sync="checkMergeInfo"
+      width="580px"
+    >
       <div>
-        <div>视频分辨率：{{MergeInfoSubmitForm.withSize}}</div>
-        <div>视频宽高比：{{MergeInfoSubmitForm.aspect}}</div>
-        <div>视频帧率：{{MergeInfoSubmitForm.fps}}</div>
-        <div>视频比特率：{{MergeInfoSubmitForm.videoBitrate}}</div>
+        <div>视频分辨率：{{ MergeInfoSubmitForm.withSize }}</div>
+        <div>视频宽高比：{{ MergeInfoSubmitForm.aspect }}</div>
+        <div>视频帧率：{{ MergeInfoSubmitForm.fps }}</div>
+        <div>视频比特率：{{ MergeInfoSubmitForm.videoBitrate }}</div>
       </div>
       <div>
         <div>排序</div>
@@ -278,17 +355,31 @@
             </el-table-column>
             <el-table-column label="大小">
               <template slot-scope="scope">
-                <span>{{ scope.row.size ? parseFloat(scope.row.size).toFixed(1) + "kb" : '-' }}</span>
+                <span>{{
+                  scope.row.size
+                    ? parseFloat(scope.row.size).toFixed(1) + "kb"
+                    : "-"
+                }}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <div class="flexCenter" style="margin:0 50px">
+                <div class="flexCenter" style="margin: 0 50px">
                   <div>
-                    <el-button size="mini" type="primary" @click="up(scope.$index,scope.row)">上移</el-button>
+                    <el-button
+                      size="mini"
+                      type="primary"
+                      @click="up(scope.$index, scope.row)"
+                      >上移</el-button
+                    >
                   </div>
                   <div>
-                    <el-button size="mini" type="danger" @click="down(scope.$index,scope.row)">下移</el-button>
+                    <el-button
+                      size="mini"
+                      type="danger"
+                      @click="down(scope.$index, scope.row)"
+                      >下移</el-button
+                    >
                   </div>
                 </div>
               </template>
@@ -297,13 +388,20 @@
         </div>
       </div>
       <div class="t_r mt_10">
-        <el-button type="default" @click="checkMergeInfo = false">取消</el-button>
+        <el-button type="default" @click="checkMergeInfo = false"
+          >取消</el-button
+        >
         <el-button type="primary" @click="toMergeVedio">确定</el-button>
       </div>
     </el-dialog>
 
     <!--剪切视频-->
-    <el-dialog title="剪切视频参数" :visible.sync="showCutInfo" @close="cleanIt" width="580px">
+    <el-dialog
+      title="剪切视频参数"
+      :visible.sync="showCutInfo"
+      @close="cleanIt"
+      width="580px"
+    >
       <el-form :model="cutInfoSubmitForm" label-width="120px">
         <el-form-item required label="起始时间">
           <el-input type="text" v-model="cutInfoSubmitForm.start"></el-input>
@@ -318,7 +416,9 @@
           <el-input type="text" v-model="cutInfoSubmitForm.type"></el-input>
         </el-form-item>
         <div class="t_r mt_10">
-          <el-button type="default" @click="showCutInfo = false">取消</el-button>
+          <el-button type="default" @click="showCutInfo = false"
+            >取消</el-button
+          >
           <el-button type="primary" @click="toCutSigleVedio">确定</el-button>
         </div>
       </el-form>
@@ -378,6 +478,22 @@ export default {
     this.getDemoList();
   },
   methods: {
+    handleClickSortTable({ column, prop, order }) {
+      switch (order) {
+        case "ascending":
+          this.demoList.sort((a, b) => {
+            return a.size - b.size;
+          });
+          break;
+        case "descending":
+          this.demoList.sort((a, b) => {
+            return b.size - a.size;
+          });
+          break;
+        default:
+          break;
+      }
+    },
     toCutSigleVedio() {
       if (this.checkedVedioList.length == 1) {
         let cutSigleVedioInfo = JSON.parse(
@@ -387,9 +503,11 @@ export default {
         this.$axios
           .post(webUrl + "cutSigleVedio", this.cutInfoSubmitForm)
           .then((res) => {
-            if (res.code == 200) {
+            console.log(res, "res");
+            if (res.data.code == 200) {
               this.$message.success("剪切成功");
               this.showCutInfo = false;
+              this.getDemoList();
             }
           });
       }
@@ -459,7 +577,7 @@ export default {
       this.$axios.post(webUrl + "demoList").then((res) => {
         if (res) {
           this.isLoading = false;
-          this.demoList = res.data.reverse();
+          this.demoList = res.data;
         }
       });
     },
