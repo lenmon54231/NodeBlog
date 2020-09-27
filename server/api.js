@@ -482,12 +482,81 @@ router.post('/api/infor', function (req, res) {
     }
   })
 })
+//获取合并后的视频
+router.post('/api/mergeVedioList', (req, res) => {
+  db.MergeVedio.find({}, (err, data) => {
+    if (err) {
+      res.send(err);
+      return
+    }
+    res.send(data)
+  })
+})
 
+// 合并后的视频删除
+router.post('/api/admin/deletemergeVedio', (req, res) => {
+  db.MergeVedio.findOne({ _id: req.body._id }, (err, docs) => {
+    if (err) {
+      res.status(500).send()
+      return
+    }
+    fs.unlinkSync('../cutMovies/output/' + docs.IDName);
+    db.MergeVedio.remove({ _id: req.body._id }, (err) => {
+      if (err) {
+        res.status(500).send()
+        return
+      }
+      res.send({ 'status': 1, 'msg': '删除成功' })
+    })
+  })
+})
+//合并后视频下载
+router.post('/api/mergeDownload/:id', function (req, res) {
+  db.MergeVedio.findOne({ _id: req.params.id }, function (err, docs) {
+    if (err) {
+      console.error(err)
+      return
+    }
+    if (docs) {
+      console.log(req.params.id, docs.IDName)
+      let filePath = '../cutMovies/output/' + docs.IDName
+      let stats = fs.statSync(filePath);
+      console.log(stats)
+      if (stats.isFile()) {
+        res.set({
+          'Content-Type': 'application/octet-stream',
+          'Content-Disposition': 'attachment; filename=' + docs.IDName,
+          'Content-Length': stats.size
+        });
+        fs.createReadStream(filePath).pipe(res);
+      } else {
+        res.end(404);
+      }
+    }
+  })
+})
 //合并视频
 router.post('/api/mergeVedio', async function (req, res) {
-  let finalVedioPath = await CutFun.waitMerege(req.body)
-  console.log(finalVedioPath, '1111111')
-  res.send({ code: 200, msg: '上传成功' })
+  let finalVedioInfo = await CutFun.mergeRun(req.body)
+  console.log('11111')
+  console.log(finalVedioInfo, 'finalas')
+  let MergeVedioInfo = {
+    IDName: finalVedioInfo.IDName,
+    name: finalVedioInfo.IDName,
+    date: getDate(),
+    size: finalVedioInfo.size / 1000,
+    status: '1',
+  }
+  if (finalVedioInfo) {
+    let newOutVedio = new db.MergeVedio(MergeVedioInfo)
+    newOutVedio.save(function (err) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send({ code: 200, msg: '保存成功' });
+      }
+    })
+  }
 })
 //剪切单个视频
 router.post('/api/cutSigleVedio', async function (req, res) {

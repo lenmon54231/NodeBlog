@@ -148,7 +148,7 @@
                 <el-button
                   size="mini"
                   type="primary"
-                  @click="download(scope.$index, scope.row)"
+                  @click="download(scope.$index, scope.row, 0)"
                   >下载</el-button
                 >
               </div>
@@ -156,7 +156,7 @@
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleDelete2(scope.$index, scope.row)"
+                  @click="handleDelete2(scope.$index, scope.row, 0)"
                   >删除</el-button
                 >
               </div>
@@ -187,11 +187,6 @@
             <span>{{ scope.row.date }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="file">
-          <template slot-scope="scope">
-            <span>{{ scope.row.fileName }}</span>
-          </template>
-        </el-table-column>
         <el-table-column label="大小">
           <template slot-scope="scope">
             <span>{{
@@ -208,7 +203,7 @@
                 <el-button
                   size="mini"
                   type="primary"
-                  @click="download(scope.$index, scope.row)"
+                  @click="download(scope.$index, scope.row, 1)"
                   >下载</el-button
                 >
               </div>
@@ -216,7 +211,7 @@
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleDelete2(scope.$index, scope.row)"
+                  @click="handleDelete2(scope.$index, scope.row, 1)"
                   >删除</el-button
                 >
               </div>
@@ -476,8 +471,18 @@ export default {
     this.isLoading = true;
     this.getArticalList();
     this.getDemoList();
+    this.getMergeVedioList();
   },
   methods: {
+    getMergeVedioList() {
+      // 获取demo列表
+      this.$axios.post(webUrl + "mergeVedioList").then((res) => {
+        if (res) {
+          this.isLoading = false;
+          this.mergeVedioList = res.data;
+        }
+      });
+    },
     handleClickSortTable({ column, prop, order }) {
       switch (order) {
         case "ascending":
@@ -675,19 +680,25 @@ export default {
       let id = row._id;
       window.open("#/detail/" + id);
     },
-    download(index, row) {
+    download(index, row, type) {
       let Tem = JSON.parse(JSON.stringify(row));
-      let infoTem = Tem.fileName.split(".");
+      let infoTem = Tem.IDName.split(".");
       let nameTem = infoTem.reduce((a, b) => {
         return a + "." + b;
       });
       let info = {
         method: "POST",
-        url: "/api/download/" + row._id,
-        responseType: "blob",
-        type: infoTem[infoTem.length - 1],
-        name: nameTem,
+        url: "/api/mergeDownload/" + row._id,
+        responseType: "blob", //二进制
+        type: infoTem[infoTem.length - 1], //文件类型
+        name: nameTem, //下载文件的自定义名称
       };
+
+      if (type == 1) {
+        info.url = "/api/mergeDownload/" + row._id;
+      } else {
+        info.url = "/api/download/" + row._id;
+      }
       exportInfo(info)
         .then((res) => {})
         .catch(() => {});
@@ -732,7 +743,7 @@ export default {
         });
     },
     cleanCloseShop() {},
-    handleDelete2(index, row) {
+    handleDelete2(index, row, type) {
       //删除--demo
       let self = this;
       let _id = row._id;
@@ -742,17 +753,22 @@ export default {
         type: "warning",
       })
         .then(() => {
-          self.$axios
-            .post(webUrl + "admin/deleteDemo", { _id: _id })
-            .then((res) => {
-              if (res.data.status == 1) {
-                self.$message({
-                  type: "success",
-                  message: "删除成功!",
-                });
-                self.fetchData2();
-              }
-            });
+          let url = null;
+          if (type == 1) {
+            url = webUrl + "admin/deletemergeVedio";
+          } else {
+            url = webUrl + "admin/deleteDemo";
+          }
+          self.$axios.post(url, { _id: _id }).then((res) => {
+            if (res.data.status == 1) {
+              self.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+              this.getDemoList();
+              this.getMergeVedioList();
+            }
+          });
         })
         .catch(() => {
           this.$message({

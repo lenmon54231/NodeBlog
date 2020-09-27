@@ -44,8 +44,7 @@ const demoSchema = new mongoose.Schema({
 const mergeVedioSchema = new mongoose.Schema({
   name: String,
   date: String,
-  fileName: String,
-  IDName: String,
+  IDName: String, 
   size: String,
   status: String,//0：未完成，1：已完成
 })
