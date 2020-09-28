@@ -57,7 +57,6 @@ const mergeRun = (object) => {
           const outFinalmergeFFmpeg = new ffmpeg(finalVedioTotalPath)
           console.log(finalVedioTotalPath, 'finalVedioTotalPath')
           outFinalmergeFFmpeg.ffprobe(finalVedioTotalPath, (err, res) => {
-            console.log(finalVedioTotalPath.split('/').splice(-1, 1))
             OutVedioInfo.IDName = finalVedioTotalPath.split('/').splice(-1, 1)[0]
             OutVedioInfo.size = res.format.size
             resolve(OutVedioInfo)

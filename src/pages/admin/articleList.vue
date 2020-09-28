@@ -97,6 +97,7 @@
         <el-button @click="handleAdd2()">上传</el-button>
         <el-button @click="mergeVedioClick()">合并</el-button>
         <el-button @click="changeOptions()">更改预设值</el-button>
+        <el-button @click="randomMerge()">随机合并</el-button>
       </div>
       <el-table
         :key="'keytable1'"
@@ -283,7 +284,7 @@
             type="text"
             show-word-limit
             maxlength="10"
-            placeholder="1600x?（允许用问号代替另一个参数）"
+            placeholder="720x1280?（允许用问号代替另一个参数）"
             v-model="MergeInfoSubmitForm.withSize"
           ></el-input>
         </el-form-item>
@@ -292,7 +293,7 @@
             type="text"
             show-word-limit
             maxlength="10"
-            placeholder="16:9"
+            placeholder="9:16"
             v-model="MergeInfoSubmitForm.aspect"
           ></el-input>
         </el-form-item>
@@ -418,6 +419,58 @@
         </div>
       </el-form>
     </el-dialog>
+
+    <!--随机合并设置-->
+    <el-dialog
+      title="随机合并设置"
+      :visible.sync="showMergeInfo"
+      @close="cleanIt"
+      width="580px"
+    >
+      <el-form :model="MergeInfoSubmitForm" label-width="120px">
+        <el-form-item required label="视频分辨率">
+          <el-input
+            type="text"
+            show-word-limit
+            maxlength="10"
+            placeholder="720x1280?（允许用问号代替另一个参数）"
+            v-model="MergeInfoSubmitForm.withSize"
+          ></el-input>
+        </el-form-item>
+        <el-form-item required label="宽高比例">
+          <el-input
+            type="text"
+            show-word-limit
+            maxlength="10"
+            placeholder="9:16"
+            v-model="MergeInfoSubmitForm.aspect"
+          ></el-input>
+        </el-form-item>
+        <el-form-item required label="视频帧率">
+          <el-input
+            type="text"
+            show-word-limit
+            maxlength="10"
+            placeholder="24（帧率会影响合并效率）"
+            v-model="MergeInfoSubmitForm.fps"
+          ></el-input>
+        </el-form-item>
+        <el-form-item required label="视频比特率">
+          <el-input
+            type="text"
+            show-word-limit
+            maxlength="10"
+            placeholder="300（数值越大生成的文件会越大）"
+            v-model="MergeInfoSubmitForm.videoBitrate"
+          ></el-input>
+        </el-form-item>
+        <div class="t_r mt_10">
+          <el-button type="default" @click="showMergeInfo = false"
+            >取消</el-button
+          >
+        </div>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -447,8 +500,8 @@ export default {
         type: null,
       },
       MergeInfoSubmitForm: {
-        withSize: "1600x?",
-        aspect: "16:9",
+        withSize: "720x1280?",
+        aspect: "9:16",
         fps: "24",
         videoBitrate: "300",
       },
@@ -474,6 +527,7 @@ export default {
     this.getMergeVedioList();
   },
   methods: {
+    randomMerge() {},
     getMergeVedioList() {
       // 获取demo列表
       this.$axios.post(webUrl + "mergeVedioList").then((res) => {
@@ -500,6 +554,7 @@ export default {
       }
     },
     toCutSigleVedio() {
+      console.log("11111");
       if (this.checkedVedioList.length == 1) {
         let cutSigleVedioInfo = JSON.parse(
           JSON.stringify(this.checkedVedioList[0])
@@ -518,7 +573,7 @@ export default {
       }
     },
     cut() {
-      this.showCutInfo = true;
+      this.this.showCutInfo = true;
     },
     sortVedioList(arr, prev, after) {
       arr[prev] = arr.splice(after, 1, arr[prev])[0];

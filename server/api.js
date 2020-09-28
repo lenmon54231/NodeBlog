@@ -538,7 +538,6 @@ router.post('/api/mergeDownload/:id', function (req, res) {
 //合并视频
 router.post('/api/mergeVedio', async function (req, res) {
   let finalVedioInfo = await CutFun.mergeRun(req.body)
-  console.log('11111')
   console.log(finalVedioInfo, 'finalas')
   let MergeVedioInfo = {
     IDName: finalVedioInfo.IDName,
