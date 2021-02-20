@@ -1,7 +1,5 @@
 <template>
-  <div class="page">
-   
-  </div>
+  <div class="page"></div>
 </template>
 
 <script>
@@ -11,15 +9,15 @@ import { webUrl } from "../../static/js/public.js";
 export default {
   data() {
     return {
-      fit:'cover',
-      items: [],
+      fit: "cover",
+      items: []
     };
   },
   created() {
-    this.$axios.post(webUrl + "demoList").then((res) => {
+    this.$axios.post(webUrl + "demoList").then(res => {
       this.items = res.data;
     });
-  },
+  }
 };
 </script>
 

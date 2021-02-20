@@ -22,7 +22,7 @@
             </el-menu-item>
             <el-menu-item index="2">
               <router-link to="/archives">
-                <i class="iconfont icon-archives"></i>归档
+                <i class="iconfont el-icon-files iconCon"></i>归档
               </router-link>
             </el-menu-item>
             <el-menu-item index="3">
@@ -32,35 +32,63 @@
             </el-menu-item>
             <el-menu-item index="4">
               <router-link to="/collections">
-                <i class="iconfont icon-shoucang"></i>收集
+                <i class="iconfont el-icon-collection iconCon"></i>收集
               </router-link>
             </el-menu-item>
             <el-menu-item index="5">
               <router-link to="/movies">
-                <i class="iconfont icon-play"></i>截图
+                <i class="iconfont el-icon-camera iconCon"></i>截图
               </router-link>
             </el-menu-item>
             <el-menu-item index="6">
-              <router-link to="/demo">
-                <i class="iconfont icon-play"></i>网抑云
+              <router-link to="/VRimage">
+                <i class="iconfont el-icon-picture iconCon"></i>贴图
               </router-link>
+            </el-menu-item>
+            <el-menu-item index="8">
+              <router-link to="/demo">
+                <i class="iconfont el-icon-service iconCon"></i>网抑云
+              </router-link>
+            </el-menu-item>
+            <el-menu-item index="9">
+              <router-link to="/bigFile">
+                <i class="iconfont el-icon-files iconCon"></i>大文件
+              </router-link>
+            </el-menu-item>
+            <el-menu-item index="10">
+              <a
+                class="resumeCon"
+                target="_blank"
+                href="https://limengtupian.oss-cn-beijing.aliyuncs.com/%E7%AE%80%E5%8E%862021/Resumd.pdf"
+              >
+                <i class="iconfont el-icon-s-order iconCon"></i>简历</a
+              >
             </el-menu-item>
             <!-- <el-menu-item index="6">
               <router-link to="/about">
                 <i class="iconfont icon-meho"></i>关于我
               </router-link>
             </el-menu-item>-->
-            <el-menu-item index="7" v-if="isSignIn===0">
-              <router-link :class="[activeIndex==7?'meBtnOn':'meBtnOff']" to="/sign">登录</router-link>
-            </el-menu-item>
-            <el-menu-item index="7" v-else-if="isSignIn===1">
+            <el-menu-item index="7" v-if="isSignIn === 0">
               <router-link
-                :class="[activeIndex==7?'meBtnOn':'meBtnOff']"
-                to="/admin/list"
-              >{{nickName}}</router-link>
+                :class="[activeIndex == 7 ? 'meBtnOn' : 'meBtnOff']"
+                to="/sign"
+                >登录</router-link
+              >
             </el-menu-item>
-            <el-menu-item index="7" v-else-if="isSignIn===2">
-              <router-link :class="[activeIndex==7?'meBtnOn':'meBtnOff']" to="/visiter">{{nickName}}</router-link>
+            <el-menu-item index="7" v-else-if="isSignIn === 1">
+              <router-link
+                :class="[activeIndex == 7 ? 'meBtnOn' : 'meBtnOff']"
+                to="/admin/list"
+                >{{ nickName }}</router-link
+              >
+            </el-menu-item>
+            <el-menu-item index="7" v-else-if="isSignIn === 2">
+              <router-link
+                :class="[activeIndex == 7 ? 'meBtnOn' : 'meBtnOff']"
+                to="/visiter"
+                >{{ nickName }}</router-link
+              >
             </el-menu-item>
           </el-menu>
         </el-col>
@@ -68,7 +96,7 @@
           <div class="nav-mob">
             <!-- <div v-if="(isSignIn===1||isSignIn===2)&&navMobile" @click="navToggle" class="avatar"></div> -->
             <img
-              v-if="(isSignIn===1||isSignIn===2)&&navMobile"
+              v-if="(isSignIn === 1 || isSignIn === 2) && navMobile"
               @click="navToggle"
               class="avatar"
               :src="avatar"
@@ -97,7 +125,11 @@
                     <router-link to="/about">About</router-link>
                   </li>
                   <li>
-                    <router-link v-if="isSignIn===1||isSignIn===2" to="/visiter">{{nickName}}</router-link>
+                    <router-link
+                      v-if="isSignIn === 1 || isSignIn === 2"
+                      to="/visiter"
+                      >{{ nickName }}</router-link
+                    >
                   </li>
                 </ul>
               </div>
@@ -113,7 +145,7 @@
 export default {
   data() {
     return {
-      navMobile: false,
+      navMobile: false
     };
   },
   methods: {
@@ -125,7 +157,7 @@ export default {
     },
     slideUp() {
       this.navMobile = this.navMobile ? false : true;
-    },
+    }
   },
   created() {},
   computed: {
@@ -142,8 +174,8 @@ export default {
     },
     avatar() {
       return localStorage.getItem("avatar");
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -243,5 +275,13 @@ header {
     line-height: 58px;
     vertical-align: top;
   }
+}
+.resumeCon {
+  display: inline-block;
+  padding: 0 20px;
+  text-align: center;
+}
+.iconCon {
+  vertical-align: middle !important;
 }
 </style>

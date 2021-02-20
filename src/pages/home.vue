@@ -8,14 +8,17 @@
           </div>
         </el-col>
         <el-col :xs="0" :sm="4" :md="6" :lg="6" :xl="6">
-          <div id="pic" @click="cut">
-            <el-image
-              ref="originImg"
-              src="../../static/img/avatar.png"
-            ></el-image>
-          </div>
-          <div v-if="circleImg">
-            <el-image :src="circleImg"></el-image>
+          <div>
+            <div id="pic" @click="cut">
+              <el-image
+                class="avatar"
+                ref="originImg"
+                src="../../static/img/avatar.png"
+              ></el-image>
+            </div>
+            <div v-if="circleImg">
+              <el-image :src="circleImg"></el-image>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -42,6 +45,19 @@ export default {
     this.$axios.post(webUrl + "articleList").then((res) => {
       this.isLoading = false;
       this.items = res.data.reverse();
+    });
+    // 打开一个WebSocket:
+    var ws = new WebSocket("ws://localhost:3001");
+
+    // 响应onmessage事件:
+    ws.onmessage = function (msg) {
+      console.log(msg);
+    };
+
+    // 给服务器发送一个字符串:
+    ws.addEventListener("open", function () {
+      let msg = "我是客户端： " + location.href;
+      ws.send(msg);
     });
   },
   methods: {
@@ -127,54 +143,17 @@ export default {
   margin: 0 10px;
   padding: 10px;
 }
-.aside {
-  background: #f8f8fd;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 0 30px rgba(10, 10, 0, 0.1) inset;
-  .card {
-    border-top: 1px solid #eee;
-    .title {
-      padding: 10px;
-      font-weight: 600;
-      color: #808080;
-      margin-bottom: 10px;
-    }
-    .pic {
-      width: 100%;
-    }
-    .row {
-      padding: 0 10px;
-      & > p {
-        color: #bfbfbf;
-      }
-      .icons {
-        padding: 10px 0;
-        .iconfont {
-          transition: all 0.3s;
-          margin: 5px;
-          color: #000;
-          font-size: 20px;
-          background-color: rgba(200, 200, 200, 0.3);
-          padding: 8px;
-          border-radius: 50%;
-          &:hover {
-            color: #fff;
-            background-color: rgba(0, 133, 166, 0.8);
-            border-radius: 5px;
-          }
-        }
-      }
 
-      & > .link {
-        color: #bfbfbf;
-        display: inline-block;
-        padding: 5px;
-        transition: all 0.3s;
-        &:hover {
-          color: #0085a1;
-        }
-      }
-    }
-  }
+#pic {
+  min-height: 150px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+.avatar {
+  width: 125px;
+  height: 125px;
 }
 #pic:hover {
   transform: rotate(666turn);

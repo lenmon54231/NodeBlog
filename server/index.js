@@ -33,3 +33,21 @@ app.use(api);
 // 监听8088端口
 app.listen(8088);
 console.log('success listen…………');
+
+
+const WebSocket = require('ws');
+const WebSocketServer = WebSocket.Server;
+const wss = new WebSocketServer({ port: 8080 });
+
+wss.on('connection', function (ws) {
+  console.log(`ws 已经连接上`);
+  ws.on('message', function (message) {
+
+    console.log(`收到客户端的数据: ${message}`);
+    ws.send(`服务端接收到数据，给客户端返回数据: ${message}`, (err) => {
+      if (err) {
+        console.log(`[SERVER] error: ${err}`);
+      }
+    });
+  })
+});
