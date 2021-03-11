@@ -1,8 +1,8 @@
 <template>
-  <footer>
-    <div class="wrapper">
-      <p>欢迎光临本站,当前总访问量{{visit}}次</p>
-      <p>今天是{{IsToday}}</p>
+  <footer class="bottomFix">
+    <div class="">
+      <p>欢迎光临本站,当前总访问量{{ visit }}次</p>
+      <p>今天是{{ IsToday }}</p>
     </div>
     <transition name="slide-fade">
       <div v-if="isTop" class="toTop iconfont icon-top" @click="toTop"></div>
@@ -17,7 +17,7 @@ export default {
     return {
       IsToday: null,
       isTop: false,
-      visit: 486,
+      visit: 486
     };
   },
   created() {
@@ -27,7 +27,7 @@ export default {
     window.addEventListener("scroll", this.scroll);
   },
   methods: {
-    scroll: function () {
+    scroll: function() {
       let scroll =
         document.body.scrollTop || document.documentElement.scrollTop;
       if (scroll > 100) {
@@ -36,20 +36,20 @@ export default {
         this.isTop = false;
       }
     },
-    toTop: function () {
+    toTop: function() {
       //Math.animation = function (from, to, duration, easing, callback) {}
       Math.animation(
         document.documentElement.scrollTop,
         0,
         800,
         "Quart.easeOut",
-        function (value) {
+        function(value) {
           document.documentElement.scrollTop = value;
           document.body.scrollTop = value;
         }
       );
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -57,11 +57,11 @@ export default {
 footer {
   background: #2d2d2d;
   color: #bbb;
-  box-shadow: 0 -2px 4px 1px rgba(0, 0, 0, 0.5);
+  //   box-shadow: 0 -2px 4px 1px rgba(0, 0, 0, 0.5);
   margin-top: 20px;
   padding: 10px 0;
   text-align: center;
-  .wrapper .iconfont {
+  .iconfont {
     color: #bbb;
     font-size: 20px;
     margin: 0 5px;
@@ -115,5 +115,11 @@ footer {
       }
     }
   }
+}
+.bottomFix {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
 }
 </style>

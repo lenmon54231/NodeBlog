@@ -171,6 +171,7 @@ a:focus {
 .wrapper {
   max-width: 1200px;
   margin: 0 auto;
+  padding-bottom: 100px;
 }
 /*字体选中颜色*/
 ::selection {

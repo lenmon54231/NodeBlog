@@ -1,6 +1,6 @@
 <template>
   <header>
-    <div class="wrapper">
+    <div class="">
       <el-row>
         <el-col :xs="20" :sm="4" :md="4" :lg="4" :xl="4">
           <div class="logo">BLOG</div>
@@ -107,23 +107,26 @@
               <div v-if="navMobile" class="content">
                 <ul @click="slideUp">
                   <li>
-                    <router-link to="/">Home</router-link>
+                    <router-link to="/">首页</router-link>
                   </li>
                   <li>
-                    <router-link to="/archives">Archives</router-link>
+                    <router-link to="/archives">归档</router-link>
                   </li>
                   <li>
-                    <router-link to="/categories">Categories</router-link>
+                    <router-link to="/categories">分类</router-link>
                   </li>
                   <li>
-                    <router-link to="/collections">Collections</router-link>
+                    <router-link to="/collections">收集</router-link>
                   </li>
                   <li>
-                    <router-link to="/demo">Demo</router-link>
+                    <router-link to="/demo">网抑</router-link>
                   </li>
                   <li>
+                    <router-link to="/HXscanCode">扫码</router-link>
+                  </li>
+                  <!-- <li>
                     <router-link to="/about">About</router-link>
-                  </li>
+                  </li> -->
                   <li>
                     <router-link
                       v-if="isSignIn === 1 || isSignIn === 2"
@@ -173,7 +176,9 @@ export default {
       return localStorage.getItem("nickName");
     },
     avatar() {
-      return localStorage.getItem("avatar");
+      return localStorage.getItem("avatar") !== "null"
+        ? localStorage.getItem("avatar")
+        : "https://limengtupian.oss-cn-beijing.aliyuncs.com/%E5%A4%B4%E5%83%8F/avatar.png";
     }
   }
 };

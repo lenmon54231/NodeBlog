@@ -36,6 +36,8 @@ const bigFile = r =>
   require.ensure([], () => r(require("@/pages/bigFile")), "chunkname1");
 const About = r =>
   require.ensure([], () => r(require("@/pages/about")), "chunkname1");
+const HXscanCode = r =>
+  require.ensure([], () => r(require("@/pages/HXscanCode")), "chunkname1");
 const Detail = r =>
   require.ensure([], () => r(require("@/pages/detail")), "chunkname2");
 const Signin = r =>
@@ -127,6 +129,11 @@ const routes = [
         path: "/bigFile",
         component: bigFile,
         name: "bigFile"
+      },
+      {
+        path: "/HXscanCode",
+        component: HXscanCode,
+        name: "HXscanCode"
       },
       {
         path: "/about",
