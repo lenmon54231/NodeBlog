@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "async-validator": "^1.8.2",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "cors": "^2.8.4",
     "deepmerge": "^2.0.1",
     "element-ui": "^2.13.2",
