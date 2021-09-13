@@ -34,30 +34,17 @@ export default {
     return {
       items: [],
       isLoading: false,
-      circleImg: null,
+      circleImg: null
     };
   },
   components: {
-    ListHome,
+    ListHome
   },
   created() {
     this.isLoading = true;
-    this.$axios.post(webUrl + "articleList").then((res) => {
+    this.$axios.post(webUrl + "articleList").then(res => {
       this.isLoading = false;
       this.items = res.data.reverse();
-    });
-    // 打开一个WebSocket:
-    var ws = new WebSocket("ws://localhost:3001");
-
-    // 响应onmessage事件:
-    ws.onmessage = function (msg) {
-      console.log(msg);
-    };
-
-    // 给服务器发送一个字符串:
-    ws.addEventListener("open", function () {
-      let msg = "我是客户端： " + location.href;
-      ws.send(msg);
     });
   },
   methods: {
@@ -131,8 +118,8 @@ export default {
       contex.restore();
       console.log(natural, diameter);
       return canvas.toDataURL("image/png");
-    },
-  },
+    }
+  }
 };
 </script>
 
